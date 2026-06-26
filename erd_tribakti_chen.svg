@@ -1,0 +1,493 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1400" width="100%" height="100%">
+  <!-- Definitions for styles and drop shadows -->
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#1e293b" flood-opacity="0.08" />
+    </filter>
+    <style>
+      .entity { fill: #0b6e99; stroke: #085374; stroke-width: 2; filter: url(#shadow); rx: 6px; }
+      .relationship { fill: #37352f; stroke: #23221f; stroke-width: 2; filter: url(#shadow); }
+      .attribute { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; filter: url(#shadow); }
+      .key-attr { font-weight: bold; text-decoration: underline; }
+      .text-label { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; fill: #1e293b; text-anchor: middle; }
+      .text-entity { font-family: 'Inter', -apple-system, sans-serif; font-size: 12px; font-weight: bold; fill: #ffffff; text-anchor: middle; }
+      .text-relation { font-family: 'Inter', -apple-system, sans-serif; font-size: 10px; font-weight: 500; fill: #ffffff; text-anchor: middle; }
+      .line-conn { stroke: #64748b; stroke-width: 1.5; }
+      .cardinality { font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold; fill: #ef4444; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" />
+
+  <!-- CONNECTIONS (drawn behind shapes) -->
+  <!-- Connections to Relationships -->
+  <!-- USER to Melakukan to PENDAFTARAN -->
+  <line x1="1000" y1="700" x2="800" y2="500" class="line-conn" />
+  <line x1="800" y1="500" x2="600" y2="300" class="line-conn" />
+
+  <!-- USER to Memiliki to INSTRUKTUR -->
+  <line x1="1000" y1="700" x2="800" y2="900" class="line-conn" />
+  <line x1="800" y1="900" x2="600" y2="1100" class="line-conn" />
+
+  <!-- USER to Mengikuti to JADWAL_LATIHAN -->
+  <line x1="1000" y1="700" x2="1200" y2="900" class="line-conn" />
+  <line x1="1200" y1="900" x2="1400" y2="1100" class="line-conn" />
+
+  <!-- INSTRUKTUR to Mengajar to JADWAL_LATIHAN -->
+  <line x1="600" y1="1100" x2="1000" y2="1100" class="line-conn" />
+  <line x1="1000" y1="1100" x2="1400" y2="1100" class="line-conn" />
+
+  <!-- JADWAL_LATIHAN to Menentukan to KURIKULUM -->
+  <line x1="1400" y1="1100" x2="1600" y2="1100" class="line-conn" />
+  <line x1="1600" y1="1100" x2="1800" y2="1100" class="line-conn" />
+
+  <!-- USER to Mengerjakan to RIWAYAT_UJIAN -->
+  <line x1="1000" y1="700" x2="1200" y2="500" class="line-conn" />
+  <line x1="1200" y1="500" x2="1400" y2="300" class="line-conn" />
+
+  <!-- RIWAYAT_UJIAN to Memiliki to DETAIL_UJIAN -->
+  <line x1="1400" y1="300" x2="1600" y2="300" class="line-conn" />
+  <line x1="1600" y1="300" x2="1800" y2="300" class="line-conn" />
+
+  <!-- BANK_SOAL_SIM to Diujikan di to DETAIL_UJIAN -->
+  <line x1="1800" y1="700" x2="1800" y2="500" class="line-conn" />
+  <line x1="1800" y1="500" x2="1800" y2="300" class="line-conn" />
+
+  <!-- USER to Menerima to SERTIFIKAT_DIGITAL -->
+  <line x1="1000" y1="700" x2="800" y2="700" class="line-conn" />
+  <line x1="800" y1="700" x2="600" y2="700" class="line-conn" />
+
+  <!-- USER to Menerima Payroll to SLIP_GAJI_INSTRUKTUR -->
+  <line x1="1000" y1="700" x2="600" y2="900" class="line-conn" />
+  <line x1="600" y1="900" x2="200" y2="1100" class="line-conn" />
+
+  <!-- USER to Menulis to FAQ -->
+  <line x1="1000" y1="700" x2="1200" y2="700" class="line-conn" />
+  <line x1="1200" y1="700" x2="1400" y2="700" class="line-conn" />
+
+  <!-- USER to Menulis to ARTIKEL -->
+  <line x1="1000" y1="700" x2="1000" y2="400" class="line-conn" />
+  <line x1="1000" y1="400" x2="1000" y2="100" class="line-conn" />
+
+  <!-- USER to Menyediakan to SLOT_INSTRUKTUR -->
+  <line x1="1000" y1="700" x2="1000" y2="1000" class="line-conn" />
+  <line x1="1000" y1="1000" x2="1000" y2="1300" class="line-conn" />
+
+  <!-- USER to Membuat to MATERI_PEMBELAJARAN -->
+  <line x1="1000" y1="700" x2="1200" y2="1000" class="line-conn" />
+  <line x1="1200" y1="1000" x2="1400" y2="1300" class="line-conn" />
+
+
+  <!-- Attribute Connections -->
+  <!-- USER Attributes -->
+  <line x1="1000" y1="700" x2="930" y2="645" class="line-conn" />
+  <line x1="1000" y1="700" x2="1000" y2="620" class="line-conn" />
+  <line x1="1000" y1="700" x2="1070" y2="645" class="line-conn" />
+
+  <!-- PENDAFTARAN Attributes -->
+  <line x1="600" y1="300" x2="530" y2="240" class="line-conn" />
+  <line x1="600" y1="300" x2="600" y2="220" class="line-conn" />
+  <line x1="600" y1="300" x2="670" y2="240" class="line-conn" />
+
+  <!-- INSTRUKTUR Attributes -->
+  <line x1="600" y1="1100" x2="530" y2="1160" class="line-conn" />
+  <line x1="600" y1="1100" x2="600" y2="1180" class="line-conn" />
+  <line x1="600" y1="1100" x2="670" y2="1160" class="line-conn" />
+
+  <!-- JADWAL_LATIHAN Attributes -->
+  <line x1="1400" y1="1100" x2="1330" y2="1160" class="line-conn" />
+  <line x1="1400" y1="1100" x2="1400" y2="1180" class="line-conn" />
+  <line x1="1400" y1="1100" x2="1470" y2="1160" class="line-conn" />
+
+  <!-- KURIKULUM Attributes -->
+  <line x1="1800" y1="1100" x2="1730" y2="1160" class="line-conn" />
+  <line x1="1800" y1="1100" x2="1870" y2="1160" class="line-conn" />
+
+  <!-- RIWAYAT_UJIAN Attributes -->
+  <line x1="1400" y1="300" x2="1330" y2="240" class="line-conn" />
+  <line x1="1400" y1="300" x2="1400" y2="220" class="line-conn" />
+  <line x1="1400" y1="300" x2="1470" y2="240" class="line-conn" />
+
+  <!-- DETAIL_UJIAN Attributes -->
+  <line x1="1800" y1="180" x2="1730" y2="120" class="line-conn" />
+  <line x1="1800" y1="180" x2="1800" y2="100" class="line-conn" />
+  <line x1="1800" y1="180" x2="1870" y2="120" class="line-conn" />
+
+  <!-- BANK_SOAL_SIM Attributes -->
+  <line x1="1800" y1="700" x2="1730" y2="760" class="line-conn" />
+  <line x1="1800" y1="700" x2="1870" y2="760" class="line-conn" />
+
+  <!-- SERTIFIKAT_DIGITAL Attributes -->
+  <line x1="600" y1="700" x2="530" y2="640" class="line-conn" />
+  <line x1="600" y1="700" x2="600" y2="620" class="line-conn" />
+  <line x1="600" y1="700" x2="670" y2="640" class="line-conn" />
+
+  <!-- SLIP_GAJI_INSTRUKTUR Attributes -->
+  <line x1="200" y1="1100" x2="130" y2="1040" class="line-conn" />
+  <line x1="200" y1="1100" x2="200" y2="1020" class="line-conn" />
+  <line x1="200" y1="1100" x2="270" y2="1040" class="line-conn" />
+
+  <!-- PENGATURAN_GAJI Attributes -->
+  <line x1="200" y1="300" x2="130" y2="240" class="line-conn" />
+  <line x1="200" y1="300" x2="200" y2="220" class="line-conn" />
+
+  <!-- PENGELUARAN_OPERASIONAL Attributes -->
+  <line x1="200" y1="500" x2="130" y2="440" class="line-conn" />
+  <line x1="200" y1="500" x2="200" y2="420" class="line-conn" />
+
+  <!-- PACKAGES Attributes -->
+  <line x1="200" y1="700" x2="130" y2="640" class="line-conn" />
+  <line x1="200" y1="700" x2="200" y2="620" class="line-conn" />
+
+  <!-- RATINGS Attributes -->
+  <line x1="200" y1="900" x2="130" y2="840" class="line-conn" />
+  <line x1="200" y1="900" x2="200" y2="820" class="line-conn" />
+
+  <!-- DOKUMENTASI Attributes -->
+  <line x1="1800" y1="900" x2="1730" y2="840" class="line-conn" />
+  <line x1="1800" y1="900" x2="1800" y2="820" class="line-conn" />
+
+  <!-- FAQ Attributes -->
+  <line x1="1400" y1="700" x2="1330" y2="640" class="line-conn" />
+  <line x1="1400" y1="700" x2="1400" y2="620" class="line-conn" />
+
+  <!-- ARTIKEL Attributes -->
+  <line x1="1000" y1="100" x2="930" y2="40" class="line-conn" />
+  <line x1="1000" y1="100" x2="1000" y2="20" class="line-conn" />
+
+  <!-- SLOT_INSTRUKTUR Attributes -->
+  <line x1="1000" y1="1300" x2="930" y2="1240" class="line-conn" />
+  <line x1="1000" y1="1300" x2="1000" y2="1220" class="line-conn" />
+
+  <!-- MATERI_PEMBELAJARAN Attributes -->
+  <line x1="1400" y1="1300" x2="1330" y2="1240" class="line-conn" />
+  <line x1="1400" y1="1300" x2="1400" y2="1220" class="line-conn" />
+
+
+  <!-- ATTRIBUTES (Ovals) -->
+  <!-- USER -->
+  <ellipse cx="930" cy="645" rx="35" ry="15" class="attribute" />
+  <text x="930" y="648" class="text-label key-attr">id</text>
+  <ellipse cx="1000" cy="620" rx="40" ry="15" class="attribute" />
+  <text x="1000" y="623" class="text-label">username</text>
+  <ellipse cx="1070" cy="645" rx="35" ry="15" class="attribute" />
+  <text x="1070" y="648" class="text-label">role</text>
+
+  <!-- PENDAFTARAN -->
+  <ellipse cx="530" cy="240" rx="35" ry="15" class="attribute" />
+  <text x="530" y="243" class="text-label key-attr">id</text>
+  <ellipse cx="600" cy="220" rx="45" ry="15" class="attribute" />
+  <text x="600" y="223" class="text-label">paket_pilihan</text>
+  <ellipse cx="670" cy="240" rx="35" ry="15" class="attribute" />
+  <text x="670" y="243" class="text-label">status</text>
+
+  <!-- INSTRUKTUR -->
+  <ellipse cx="530" cy="1160" rx="35" ry="15" class="attribute" />
+  <text x="530" y="1163" class="text-label key-attr">id</text>
+  <ellipse cx="600" cy="1180" rx="45" ry="15" class="attribute" />
+  <text x="600" y="1183" class="text-label">nama_lengkap</text>
+  <ellipse cx="670" cy="1160" rx="35" ry="15" class="attribute" />
+  <text x="670" y="1163" class="text-label">no_telepon</text>
+
+  <!-- JADWAL_LATIHAN -->
+  <ellipse cx="1330" y="1160" rx="35" ry="15" class="attribute" />
+  <text x="1330" y="1163" class="text-label key-attr">id</text>
+  <ellipse cx="1400" cy="1180" rx="45" ry="15" class="attribute" />
+  <text x="1400" y="1183" class="text-label">tanggal_waktu</text>
+  <ellipse cx="1470" cy="1160" rx="35" ry="15" class="attribute" />
+  <text x="1470" y="1163" class="text-label">status</text>
+
+  <!-- KURIKULUM -->
+  <ellipse cx="1730" cy="1160" rx="35" ry="15" class="attribute" />
+  <text x="1730" y="1163" class="text-label key-attr">id</text>
+  <ellipse cx="1870" cy="1160" rx="35" ry="15" class="attribute" />
+  <text x="1870" y="1163" class="text-label">materi</text>
+
+  <!-- RIWAYAT_UJIAN -->
+  <ellipse cx="1330" cy="240" rx="35" ry="15" class="attribute" />
+  <text x="1330" y="243" class="text-label key-attr">id</text>
+  <ellipse cx="1400" cy="220" rx="35" ry="15" class="attribute" />
+  <text x="1400" y="223" class="text-label">skor</text>
+  <ellipse cx="1470" cy="240" rx="35" ry="15" class="attribute" />
+  <text x="1470" y="243" class="text-label">status</text>
+
+  <!-- DETAIL_UJIAN -->
+  <ellipse cx="1730" cy="120" rx="35" ry="15" class="attribute" />
+  <text x="1730" y="123" class="text-label key-attr">id</text>
+  <ellipse cx="1800" cy="100" rx="45" ry="15" class="attribute" />
+  <text x="1800" y="103" class="text-label">jawaban_siswa</text>
+  <ellipse cx="1870" cy="120" rx="35" ry="15" class="attribute" />
+  <text x="1870" y="123" class="text-label">is_benar</text>
+
+  <!-- BANK_SOAL_SIM -->
+  <ellipse cx="1730" cy="760" rx="35" ry="15" class="attribute" />
+  <text x="1730" y="763" class="text-label key-attr">id</text>
+  <ellipse cx="1870" cy="760" rx="40" ry="15" class="attribute" />
+  <text x="1870" y="763" class="text-label">pertanyaan</text>
+
+  <!-- SERTIFIKAT_DIGITAL -->
+  <ellipse cx="530" cy="640" rx="35" ry="15" class="attribute" />
+  <text x="530" y="643" class="text-label key-attr">id</text>
+  <ellipse cx="600" cy="620" rx="45" ry="15" class="attribute" />
+  <text x="600" y="623" class="text-label">nomor_sertifikat</text>
+  <ellipse cx="670" cy="640" rx="35" ry="15" class="attribute" />
+  <text x="670" y="643" class="text-label">skor_ujian</text>
+
+  <!-- SLIP_GAJI_INSTRUKTUR -->
+  <ellipse cx="130" cy="1040" rx="35" ry="15" class="attribute" />
+  <text x="130" y="1043" class="text-label key-attr">id</text>
+  <ellipse cx="200" cy="1020" rx="45" ry="15" class="attribute" />
+  <text x="200" y="1023" class="text-label">bulan_tahun</text>
+  <ellipse cx="270" cy="1040" rx="35" ry="15" class="attribute" />
+  <text x="270" y="1043" class="text-label">total_gaji</text>
+
+  <!-- PENGATURAN_GAJI -->
+  <ellipse cx="130" cy="240" rx="35" ry="15" class="attribute" />
+  <text x="130" y="243" class="text-label key-attr">id</text>
+  <ellipse cx="200" cy="220" rx="45" ry="15" class="attribute" />
+  <text x="200" y="223" class="text-label">tarif_per_sesi</text>
+
+  <!-- PENGELUARAN_OPERASIONAL -->
+  <ellipse cx="130" cy="440" rx="35" ry="15" class="attribute" />
+  <text x="130" y="443" class="text-label key-attr">id</text>
+  <ellipse cx="200" cy="420" rx="45" ry="15" class="attribute" />
+  <text x="200" y="423" class="text-label">nominal</text>
+
+  <!-- PACKAGES -->
+  <ellipse cx="130" cy="640" rx="35" ry="15" class="attribute" />
+  <text x="130" y="643" class="text-label key-attr">id</text>
+  <ellipse cx="200" cy="620" rx="45" ry="15" class="attribute" />
+  <text x="200" y="623" class="text-label">name</text>
+
+  <!-- RATINGS -->
+  <ellipse cx="130" cy="840" rx="35" ry="15" class="attribute" />
+  <text x="130" y="843" class="text-label key-attr">id</text>
+  <ellipse cx="200" cy="820" rx="45" ry="15" class="attribute" />
+  <text x="200" y="823" class="text-label">skor</text>
+
+  <!-- DOKUMENTASI -->
+  <ellipse cx="1730" cy="840" rx="35" ry="15" class="attribute" />
+  <text x="1730" y="843" class="text-label key-attr">id</text>
+  <ellipse cx="1800" cy="820" rx="45" ry="15" class="attribute" />
+  <text x="1800" y="823" class="text-label">caption</text>
+
+  <!-- FAQ -->
+  <ellipse cx="1330" cy="640" rx="35" ry="15" class="attribute" />
+  <text x="1330" y="643" class="text-label key-attr">id</text>
+  <ellipse cx="1400" cy="620" rx="45" ry="15" class="attribute" />
+  <text x="1400" y="623" class="text-label">tanya</text>
+
+  <!-- ARTIKEL -->
+  <ellipse cx="930" cy="40" rx="35" ry="15" class="attribute" />
+  <text x="930" y="43" class="text-label key-attr">id</text>
+  <ellipse cx="1000" cy="20" rx="45" ry="15" class="attribute" />
+  <text x="1000" y="23" class="text-label">judul</text>
+
+  <!-- SLOT_INSTRUKTUR -->
+  <ellipse cx="930" cy="1240" rx="35" ry="15" class="attribute" />
+  <text x="930" y="1243" class="text-label key-attr">id</text>
+  <ellipse cx="1000" cy="1220" rx="45" ry="15" class="attribute" />
+  <text x="1000" y="1223" class="text-label">tanggal</text>
+
+  <!-- MATERI_PEMBELAJARAN -->
+  <ellipse cx="1330" cy="1240" rx="35" ry="15" class="attribute" />
+  <text x="1330" y="1243" class="text-label key-attr">id</text>
+  <ellipse cx="1400" cy="1220" rx="45" ry="15" class="attribute" />
+  <text x="1400" y="1223" class="text-label">judul</text>
+
+
+  <!-- RELATIONSHIPS (Diamonds) -->
+  <!-- USER Melakukan PENDAFTARAN -->
+  <polygon points="800,475 860,500 800,525 740,500" class="relationship" />
+  <text x="800" y="504" class="text-relation">Melakukan</text>
+
+  <!-- USER Memiliki INSTRUKTUR -->
+  <polygon points="800,875 860,900 800,925 740,900" class="relationship" />
+  <text x="800" y="904" class="text-relation">Memiliki</text>
+
+  <!-- USER Mengikuti JADWAL_LATIHAN -->
+  <polygon points="1200,875 1260,900 1200,925 1140,900" class="relationship" />
+  <text x="1200" y="904" class="text-relation">Mengikuti</text>
+
+  <!-- INSTRUKTUR Mengajar JADWAL_LATIHAN -->
+  <polygon points="1000,1075 1060,1100 1000,1125 940,1100" class="relationship" />
+  <text x="1000" y="1104" class="text-relation">Mengajar</text>
+
+  <!-- KURIKULUM Menentukan JADWAL_LATIHAN -->
+  <polygon points="1600,1075 1660,1100 1600,1125 1540,1100" class="relationship" />
+  <text x="1600" y="1104" class="text-relation">Menentukan</text>
+
+  <!-- USER Mengerjakan RIWAYAT_UJIAN -->
+  <polygon points="1200,475 1260,500 1200,525 1140,500" class="relationship" />
+  <text x="1200" y="504" class="text-relation">Mengerjakan</text>
+
+  <!-- RIWAYAT_UJIAN Memiliki DETAIL_UJIAN -->
+  <polygon points="1600,275 1660,300 1600,325 1540,300" class="relationship" />
+  <text x="1600" y="304" class="text-relation">Memiliki</text>
+
+  <!-- BANK_SOAL_SIM Diujikan di DETAIL_UJIAN -->
+  <polygon points="1800,475 1860,500 1800,525 1740,500" class="relationship" />
+  <text x="1800" y="504" class="text-relation">Diujikan di</text>
+
+  <!-- USER Menerima SERTIFIKAT_DIGITAL -->
+  <polygon points="800,675 860,700 800,725 740,700" class="relationship" />
+  <text x="800" y="704" class="text-relation">Menerima</text>
+
+  <!-- USER Menerima Payroll SLIP_GAJI_INSTRUKTUR -->
+  <polygon points="600,875 660,900 600,925 540,900" class="relationship" />
+  <text x="600" y="904" class="text-relation">Menerima</text>
+
+  <!-- USER Menulis FAQ -->
+  <polygon points="1200,675 1260,700 1200,725 1140,700" class="relationship" />
+  <text x="1200" y="704" class="text-relation">Menulis</text>
+
+  <!-- USER Menulis ARTIKEL -->
+  <polygon points="1000,375 1060,400 1000,425 940,400" class="relationship" />
+  <text x="1000" y="404" class="text-relation">Menulis</text>
+
+  <!-- USER Menyediakan SLOT_INSTRUKTUR -->
+  <polygon points="1000,975 1060,1000 1000,1025 940,1000" class="relationship" />
+  <text x="1000" y="1004" class="text-relation">Menyediakan</text>
+
+  <!-- USER Membuat MATERI_PEMBELAJARAN -->
+  <polygon points="1200,975 1260,1000 1200,1025 1140,1000" class="relationship" />
+  <text x="1200" y="1004" class="text-relation">Membuat</text>
+
+
+  <!-- ENTITIES (Rectangles) -->
+  <!-- USER / AKUN_PENGGUNA -->
+  <rect x="925" y="675" width="150" height="50" class="entity" />
+  <text x="1000" y="705" class="text-entity">USER</text>
+
+  <!-- PENDAFTARAN -->
+  <rect x="525" y="275" width="150" height="50" class="entity" />
+  <text x="600" y="305" class="text-entity">PENDAFTARAN</text>
+
+  <!-- INSTRUKTUR -->
+  <rect x="525" y="1075" width="150" height="50" class="entity" />
+  <text x="600" y="1105" class="text-entity">INSTRUKTUR</text>
+
+  <!-- JADWAL_LATIHAN -->
+  <rect x="1325" y="1075" width="150" height="50" class="entity" />
+  <text x="1400" y="1105" class="text-entity">JADWAL_LATIHAN</text>
+
+  <!-- KURIKULUM -->
+  <rect x="1725" y="1075" width="150" height="50" class="entity" />
+  <text x="1800" y="1105" class="text-entity">KURIKULUM</text>
+
+  <!-- RIWAYAT_UJIAN -->
+  <rect x="1325" y="275" width="150" height="50" class="entity" />
+  <text x="1400" y="305" class="text-entity">RIWAYAT_UJIAN</text>
+
+  <!-- DETAIL_UJIAN -->
+  <rect x="1725" y="275" width="150" height="50" class="entity" />
+  <text x="1800" y="305" class="text-entity">DETAIL_UJIAN</text>
+
+  <!-- BANK_SOAL_SIM -->
+  <rect x="1725" y="675" width="150" height="50" class="entity" />
+  <text x="1800" y="705" class="text-entity">BANK_SOAL_SIM</text>
+
+  <!-- SERTIFIKAT_DIGITAL -->
+  <rect x="525" y="675" width="150" height="50" class="entity" />
+  <text x="600" y="705" class="text-entity">SERTIFIKAT_DIGITAL</text>
+
+  <!-- SLIP_GAJI_INSTRUKTUR -->
+  <rect x="125" y="1075" width="150" height="50" class="entity" />
+  <text x="200" y="1105" class="text-entity">SLIP_GAJI</text>
+
+  <!-- FAQ -->
+  <rect x="1325" y="675" width="150" height="50" class="entity" />
+  <text x="1400" y="705" class="text-entity">FAQ</text>
+
+  <!-- ARTIKEL -->
+  <rect x="925" y="75" width="150" height="50" class="entity" />
+  <text x="1000" y="105" class="text-entity">ARTIKEL</text>
+
+  <!-- SLOT_INSTRUKTUR -->
+  <rect x="925" y="1275" width="150" height="50" class="entity" />
+  <text x="1000" y="1305" class="text-entity">SLOT_INSTRUKTUR</text>
+
+  <!-- MATERI_PEMBELAJARAN -->
+  <rect x="1325" y="1275" width="150" height="50" class="entity" />
+  <text x="1400" y="1305" class="text-entity">MATERI_BELAJAR</text>
+
+  <!-- STANDALONE ENTITIES (No relations) -->
+  <!-- PENGATURAN_GAJI -->
+  <rect x="125" y="275" width="150" height="50" class="entity" />
+  <text x="200" y="305" class="text-entity">PENGATURAN_GAJI</text>
+
+  <!-- PENGELUARAN_OPERASIONAL -->
+  <rect x="125" y="475" width="150" height="50" class="entity" />
+  <text x="200" y="505" class="text-entity">PENGELUARAN_OP</text>
+
+  <!-- PACKAGES -->
+  <rect x="125" y="675" width="150" height="50" class="entity" />
+  <text x="200" y="705" class="text-entity">PACKAGES</text>
+
+  <!-- RATINGS -->
+  <rect x="125" y="875" width="150" height="50" class="entity" />
+  <text x="200" y="905" class="text-entity">RATINGS</text>
+
+  <!-- DOKUMENTASI -->
+  <rect x="1725" y="875" width="150" height="50" class="entity" />
+  <text x="1800" y="905" class="text-entity">DOKUMENTASI</text>
+
+
+  <!-- CARDINALITY LABELS -->
+  <!-- USER Melakukan PENDAFTARAN (1:N) -->
+  <text x="910" y="630" class="cardinality">1</text>
+  <text x="635" y="355" class="cardinality">N</text>
+
+  <!-- USER Memiliki INSTRUKTUR (1:1) -->
+  <text x="910" y="780" class="cardinality">1</text>
+  <text x="635" y="1045" class="cardinality">1</text>
+
+  <!-- USER Mengikuti JADWAL_LATIHAN (1:N) -->
+  <text x="1090" y="780" class="cardinality">1</text>
+  <text x="1365" y="1045" class="cardinality">N</text>
+
+  <!-- INSTRUKTUR Mengajar JADWAL_LATIHAN (1:N) -->
+  <text x="690" y="1095" class="cardinality">1</text>
+  <text x="1310" y="1095" class="cardinality">N</text>
+
+  <!-- KURIKULUM Menentukan JADWAL_LATIHAN (1:N) -->
+  <text x="1710" y="1095" class="cardinality">1</text>
+  <text x="1490" y="1095" class="cardinality">N</text>
+
+  <!-- USER Mengerjakan RIWAYAT_UJIAN (1:N) -->
+  <text x="1090" y="630" class="cardinality">1</text>
+  <text x="1365" y="355" class="cardinality">N</text>
+
+  <!-- RIWAYAT_UJIAN Memiliki DETAIL_UJIAN (1:N) -->
+  <text x="1490" y="295" class="cardinality">1</text>
+  <text x="1710" y="295" class="cardinality">N</text>
+
+  <!-- BANK_SOAL_SIM Diujikan di DETAIL_UJIAN (1:N) -->
+  <text x="1815" y="660" class="cardinality">1</text>
+  <text x="1815" y="360" class="cardinality">N</text>
+
+  <!-- USER Menerima SERTIFIKAT_DIGITAL (1:1) -->
+  <text x="910" y="695" class="cardinality">1</text>
+  <text x="690" y="695" class="cardinality">1</text>
+
+  <!-- USER Menerima Payroll SLIP_GAJI_INSTRUKTUR (1:N) -->
+  <text x="750" y="800" class="cardinality">1</text>
+  <text x="250" y="1050" class="cardinality">N</text>
+
+  <!-- USER Menulis FAQ (1:N) -->
+  <text x="1090" y="695" class="cardinality">1</text>
+  <text x="1310" y="695" class="cardinality">N</text>
+
+  <!-- USER Menulis ARTIKEL (1:N) -->
+  <text x="990" y="660" class="cardinality">1</text>
+  <text x="990" y="140" class="cardinality">N</text>
+
+  <!-- USER Menyediakan SLOT_INSTRUKTUR (1:N) -->
+  <text x="990" y="740" class="cardinality">1</text>
+  <text x="990" y="1260" class="cardinality">N</text>
+
+  <!-- USER Membuat MATERI_PEMBELAJARAN (1:N) -->
+  <text x="1080" y="760" class="cardinality">1</text>
+  <text x="1350" y="1250" class="cardinality">N</text>
+</svg>
