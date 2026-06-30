@@ -77,7 +77,7 @@ export default function Sertifikat() {
         .eq('id', targetAkunId)
         .single();
 
-      let expectedSesi = userAcc?.jumlah_sesi || 0;
+      let expectedSesi = parseInt(userAcc?.jumlah_sesi) || 0;
       // Fallback berdasarkan paket_pilihan jika jumlah_sesi di akun_pengguna bernilai 0 atau null
       if (!expectedSesi && dataSiswa?.paket_pilihan) {
         const lowerPaket = dataSiswa.paket_pilihan.toLowerCase();

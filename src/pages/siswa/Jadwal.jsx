@@ -98,7 +98,7 @@ export default function Jadwal() {
         .maybeSingle(); 
  
       if (userData) { 
-        let sessionsCount = userData.jumlah_sesi || 0;
+        let sessionsCount = parseInt(userData.jumlah_sesi) || 0;
         if (!sessionsCount && userData.paket) {
           const lowerPaket = userData.paket.toLowerCase();
           if (lowerPaket.includes('plus')) sessionsCount = 11;

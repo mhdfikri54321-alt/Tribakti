@@ -94,7 +94,7 @@ export default function AdminDaftarSertifikat() {
           .eq('id', p.akun_id)
           .single();
 
-        let expectedSesi = userAcc?.jumlah_sesi || 0;
+        let expectedSesi = parseInt(userAcc?.jumlah_sesi) || 0;
         // Fallback berdasarkan paket_pilihan jika jumlah_sesi di akun_pengguna bernilai 0 atau null
         if (!expectedSesi && p.paket_pilihan) {
           const lowerPaket = p.paket_pilihan.toLowerCase();
