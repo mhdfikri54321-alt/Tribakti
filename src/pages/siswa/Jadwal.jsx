@@ -496,9 +496,15 @@ export default function Jadwal() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: siswaPackage?.jumlah_sesi || 11 }, (_, i) => i + 1).map(num => (
-                <div key={num}>{getSesiContent(num)}</div>
-              ))}
+              {listJadwal.length > 0 ? (
+                listJadwal.map(jadwal => (
+                  <div key={jadwal.pertemuan_ke}>{getSesiContent(jadwal.pertemuan_ke)}</div>
+                ))
+              ) : (
+                <div className="col-span-3 text-center py-12 text-sm text-[#37352f]/40 font-medium italic">
+                  Belum ada sesi latihan yang dibuat oleh Admin.
+                </div>
+              )}
             </div>
           )}
         </main>
