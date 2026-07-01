@@ -501,12 +501,9 @@ export default function Jadwal() {
                   Menunggu Persetujuan
                 </div>
               ) : isLocked ? (
-                <button 
-                  onClick={() => handleBukaModalPesan({ pertemuan_ke: nomorSesi }, true)}
-                  className="w-full py-2 bg-amber-500 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 cursor-pointer"
-                >
-                  Ajukan Reschedule
-                </button>
+                <div className="text-center py-2 text-[9px] font-bold text-amber-600 uppercase tracking-widest border border-amber-100 bg-amber-50/40 rounded-lg">
+                  Jadwal Terkunci
+                </div>
               ) : (
                 <div className="space-y-1">
                   <button 
