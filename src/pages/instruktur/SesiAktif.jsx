@@ -211,13 +211,10 @@ export default function SesiAktif() {
                 <div className="relative w-64 group">
                   <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#37352f]/30 group-focus-within:text-[#0b6e99] transition-colors pointer-events-none" />
                   <input 
-                    type={isFocused || filterTanggal ? "date" : "text"}
-                    placeholder="Pilih tanggal filter..."
+                    type="date"
                     className="w-full bg-white border border-[#e9e9e7] rounded-xl pl-11 pr-4 py-3 text-xs font-semibold outline-none transition-all focus:border-[#0b6e99]/30 cursor-pointer min-h-[46px] text-[#37352f]"
                     value={filterTanggal}
                     onChange={(e) => setFilterTanggal(e.target.value)}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
                   />
                 </div>
               </div>
