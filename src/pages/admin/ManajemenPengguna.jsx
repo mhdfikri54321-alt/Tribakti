@@ -267,6 +267,7 @@ export default function ManajemenPengguna() {
                           <span className={`px-4 py-2 rounded-xl text-[10px] font-bold tracking-widest uppercase border ${
                             akun.role === 'admin' ? 'bg-rose-50 text-rose-600 border-rose-100' : 
                             akun.role === 'instruktur' ? 'bg-blue-50 text-blue-600 border-blue-100' : 
+                            akun.role === 'owner' ? 'bg-purple-50 text-purple-600 border-purple-100' : 
                             'bg-emerald-50 text-emerald-600 border-emerald-100'
                           }`}>
                             {akun.role}
@@ -383,6 +384,7 @@ export default function ManajemenPengguna() {
                     <option value="siswa">Siswa</option>
                     <option value="instruktur">Instruktur</option>
                     <option value="admin">Administrator</option>
+                    <option value="owner">Owner</option>
                   </select>
                 </div>
               </div>
