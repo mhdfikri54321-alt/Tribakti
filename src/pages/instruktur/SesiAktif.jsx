@@ -239,7 +239,7 @@ export default function SesiAktif() {
                         <td className="p-6">
                           <div className="font-semibold text-[#37352f] group-hover:text-[#0b6e99] transition-colors flex items-center gap-2 flex-wrap">
                             <span>{item.akun_pengguna?.nama_lengkap}</span>
-                            {item.akun_pengguna?.pendaftaran?.[0]?.no_whatsapp && (
+                            {item.status === 'Dijadwalkan' && item.akun_pengguna?.pendaftaran?.[0]?.no_whatsapp && (
                               <a
                                 href={`https://wa.me/${item.akun_pengguna.pendaftaran[0].no_whatsapp.replace(/^0/, '62')}?text=${encodeURIComponent(
                                   `Halo ${item.akun_pengguna?.nama_lengkap || 'Siswa'}, saya ${namaInstruktur} selaku instruktur TriBakti Anda. Mengingatkan jadwal latihan kita pada tanggal ${item.tanggal_waktu ? new Date(item.tanggal_waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} pukul ${item.tanggal_waktu ? new Date(item.tanggal_waktu).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }).replace('.', ':') : ''} WIB dengan materi: ${item.kurikulum?.materi || 'Materi Belajar'}. Mohon bersiap ya!`
@@ -279,9 +279,10 @@ export default function SesiAktif() {
                           <span className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest ${
                             item.status === 'Selesai' ? 'bg-emerald-50 text-emerald-700' : 
                             item.status === 'Pengajuan Reschedule' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
+                            item.status === 'Dijadwalkan' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
                             'bg-[#efefed] text-[#0b6e99]'
                           }`}>
-                            {item.status || 'Belum Dimulai'}
+                            {item.status === 'Dijadwalkan' ? 'Dikunci (Dijadwalkan)' : (item.status || 'Belum Dimulai')}
                           </span>
                           {item.status === 'Pengajuan Reschedule' && item.catatan_instruktur && (
                             <div className="text-[9px] text-[#0b6e99] font-bold uppercase tracking-wider mt-1.5 max-w-xs leading-relaxed italic">
