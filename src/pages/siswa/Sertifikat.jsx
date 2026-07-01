@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import * as htmlToImage from 'html-to-image';
+import { jsPDF } from 'jspdf';
 import logoTribakti from '../../assets/logo_tribaktii.png';
 import Sidebar from './Sidebar';
 import AdminSidebar from '../admin/AdminSidebar';
@@ -135,6 +136,46 @@ export default function Sertifikat() {
     }
   };
 
+  const handleDownloadPDF = async () => {
+    if (!certRef.current) return;
+    
+    setDownloading(true);
+    try {
+      await document.fonts.ready;
+      
+      // Ambil dimensi asli elemen
+      const width = certRef.current.offsetWidth;
+      const height = certRef.current.offsetHeight;
+
+      const dataUrl = await htmlToImage.toPng(certRef.current, {
+        width: width,
+        height: height,
+        style: {
+          transform: 'scale(1)',
+          margin: '0',
+          left: '0',
+          top: '0',
+        },
+        pixelRatio: 2, // Kualitas 2x sangat baik untuk cetak PDF
+        backgroundColor: '#ffffff',
+        cacheBust: true,
+      });
+      
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [width, height]
+      });
+      pdf.addImage(dataUrl, 'PNG', 0, 0, width, height);
+      pdf.save(`Sertifikat-TriBakti-${studentInfo?.nama_lengkap || 'Siswa'}.pdf`);
+    } catch (err) {
+      console.error("Gagal mengunduh PDF:", err);
+      alert("Gagal mengunduh sertifikat sebagai PDF.");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   const handleUploadToDatabase = async () => {
     if (!certRef.current || !certData) return;
     
@@ -262,15 +303,30 @@ export default function Sertifikat() {
             <ChevronRight className="w-4 h-4 text-[#37352f]/30" />
             <span className="text-sm font-semibold">{isAdmin ? 'Preview Sertifikat' : 'E-Sertifikat'}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-semibold leading-none">{isAdmin ? savedUser.nama_lengkap : (studentInfo?.nama_lengkap || 'Siswa')}</p>
-              <p className="text-[10px] text-[#37352f]/50 font-bold uppercase tracking-wider mt-1">{isAdmin ? 'Administrator' : 'Portal Siswa'}</p>
+          {!isAdmin ? (
+            <button 
+              onClick={() => navigate('/profil')}
+              className="flex items-center gap-3 hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent text-[#37352f] text-left p-0"
+            >
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-semibold leading-none">{studentInfo?.nama_lengkap || 'Siswa'}</p>
+                <p className="text-[10px] text-[#37352f]/50 font-bold uppercase tracking-wider mt-1">Portal Siswa</p>
+              </div>
+              <div className="w-8 h-8 bg-[#efefed] rounded flex items-center justify-center text-sm font-bold text-[#37352f]">
+                {studentInfo?.nama_lengkap?.charAt(0) || 'S'}
+              </div>
+            </button>
+          ) : (
+            <div className="flex items-center gap-3">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-semibold leading-none">{savedUser.nama_lengkap}</p>
+                <p className="text-[10px] text-[#37352f]/50 font-bold uppercase tracking-wider mt-1">Administrator</p>
+              </div>
+              <div className="w-8 h-8 bg-[#efefed] rounded flex items-center justify-center text-sm font-bold text-[#37352f]">
+                {savedUser.nama_lengkap?.charAt(0)}
+              </div>
             </div>
-            <div className="w-8 h-8 bg-[#efefed] rounded flex items-center justify-center text-sm font-bold text-[#37352f]">
-              {isAdmin ? savedUser.nama_lengkap?.charAt(0) : (studentInfo?.nama_lengkap?.charAt(0) || 'S')}
-            </div>
-          </div>
+          )}
         </header>
 
         <main className="flex-1 overflow-y-auto w-full px-4 md:px-8 py-6 md:py-12 print:block print:p-0 print:overflow-visible">
@@ -340,13 +396,22 @@ export default function Sertifikat() {
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
                   <button 
-                    onClick={handleDownloadImage}
+                    onClick={handleDownloadPDF}
                     disabled={downloading}
-                    className="flex items-center justify-center gap-2 bg-white border border-[#e9e9e7] text-[#37352f] px-6 py-2.5 md:px-8 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-[#efefed] transition-all shadow-sm disabled:opacity-50 w-full sm:w-auto"
+                    className="flex items-center justify-center gap-2 bg-[#0b6e99] text-white px-6 py-2.5 md:px-8 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-[#085a80] transition-all shadow-md disabled:opacity-50 w-full sm:w-auto cursor-pointer"
                   >
                     {downloading ? (
-                      <div className="w-4 h-4 border-2 border-[#37352f]/20 border-t-[#37352f] rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
                     ) : <Download className="w-4 h-4" />} 
+                    Unduh PDF
+                  </button>
+
+                  <button 
+                    onClick={handleDownloadImage}
+                    disabled={downloading}
+                    className="flex items-center justify-center gap-2 bg-white border border-[#e9e9e7] text-[#37352f] px-6 py-2.5 md:px-8 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-[#efefed] transition-all shadow-sm disabled:opacity-50 w-full sm:w-auto cursor-pointer"
+                  >
+                    <Award className="w-4 h-4" /> 
                     Simpan Gambar
                   </button>
 
@@ -354,7 +419,7 @@ export default function Sertifikat() {
                     <button 
                       onClick={handleUploadToDatabase}
                       disabled={syncing}
-                      className="flex items-center justify-center gap-2 bg-[#0b6e99] text-white px-6 py-2.5 md:px-8 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-900 transition-all shadow-xl shadow-[#0b6e99]/10 disabled:opacity-50 w-full sm:w-auto"
+                      className="flex items-center justify-center gap-2 bg-slate-800 text-white px-6 py-2.5 md:px-8 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-900 transition-all shadow-xl disabled:opacity-50 w-full sm:w-auto cursor-pointer"
                     >
                       {syncing ? (
                         <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
@@ -366,7 +431,7 @@ export default function Sertifikat() {
                   {isAdmin && (
                     <button 
                       onClick={handlePrint}
-                      className="flex items-center justify-center gap-2 bg-[#37352f] text-white px-6 py-2.5 md:px-8 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-[#0b6e99] transition-all shadow-xl shadow-[#37352f]/10 w-full sm:w-auto"
+                      className="flex items-center justify-center gap-2 bg-[#37352f] text-white px-6 py-2.5 md:px-8 md:py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-[#0b6e99] transition-all shadow-xl shadow-[#37352f]/10 w-full sm:w-auto cursor-pointer"
                     >
                       <FileText className="w-4 h-4" /> Cetak Sertifikat
                     </button>

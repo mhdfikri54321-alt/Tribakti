@@ -17,6 +17,7 @@ export default function ManageJam() {
 
   // State Tanggal Filter Pencarian
   const [filterTanggal, setFilterTanggal] = useState('');
+  const [isFocusedFilter, setIsFocusedFilter] = useState(false);
 
   const savedUser = JSON.parse(localStorage.getItem('user'));
   const instrukturId = savedUser?.id;
@@ -309,19 +310,14 @@ export default function ManageJam() {
                 {/* INPUT FILTER TANGGAL */}
                 <div className="relative w-64 group">
                   <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#37352f]/30 group-focus-within:text-[#0b6e99] transition-colors pointer-events-none" />
-                  
-                  {/* Placeholder overlay */}
-                  {!filterTanggal && (
-                    <span className="absolute left-11 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#37352f]/40 pointer-events-none font-sans">
-                      Pilih tanggal filter...
-                    </span>
-                  )}
-                  
                   <input 
-                    type="date" 
-                    className={`w-full bg-white border border-[#e9e9e7] rounded-xl pl-11 pr-4 py-3 text-xs font-semibold outline-none transition-all focus:border-[#0b6e99]/30 cursor-pointer min-h-[46px] ${filterTanggal ? 'text-[#37352f]' : 'text-transparent'}`}
+                    type={isFocusedFilter || filterTanggal ? "date" : "text"}
+                    placeholder="Pilih tanggal filter..."
+                    className="w-full bg-white border border-[#e9e9e7] rounded-xl pl-11 pr-4 py-3 text-xs font-semibold outline-none transition-all focus:border-[#0b6e99]/30 cursor-pointer min-h-[46px] text-[#37352f]"
                     value={filterTanggal}
                     onChange={(e) => setFilterTanggal(e.target.value)}
+                    onFocus={() => setIsFocusedFilter(true)}
+                    onBlur={() => setIsFocusedFilter(false)}
                   />
                 </div>
               </div>

@@ -6,8 +6,10 @@ export default function Footer() {
     <footer className="py-12 px-8 border-t border-[#e9e9e7] bg-white mt-auto w-full font-sans">
       <div className="flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="text-center md:text-left">
-          <div className="flex items-center gap-2 justify-center md:justify-start mb-3">
-            <img src={logoTribakti} alt="Logo" className="w-6 h-6 object-contain" />
+          <div className="flex items-center gap-3 justify-center md:justify-start mb-3">
+            <div className="w-9 h-9 bg-white border border-[#e9e9e7] rounded-lg flex items-center justify-center p-1.5 shadow-sm shrink-0">
+              <img src={logoTribakti} alt="Logo" className="w-6 h-6 object-contain" />
+            </div>
             <h1 className="text-base font-bold tracking-tight text-[#37352f]">Tri<span className="text-[#0b6e99]">Bakti</span></h1>
           </div>
           <p className="text-[#37352f]/40 text-xs font-medium max-w-xs leading-relaxed">

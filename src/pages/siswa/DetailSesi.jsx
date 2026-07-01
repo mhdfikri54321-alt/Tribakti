@@ -126,7 +126,10 @@ export default function DetailSesi() {
             <ChevronRight className="w-4 h-4 text-[#37352f]/30" />
             <span className="text-sm font-semibold">Detail Sesi {nomorSesi}</span>
           </div>
-          <div className="flex items-center gap-3">
+          <button 
+            onClick={() => navigate('/profil')}
+            className="flex items-center gap-3 hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent text-[#37352f] text-left p-0"
+          >
             <div className="text-right hidden sm:block">
               <p className="text-sm font-semibold leading-none">{studentInfo?.nama_lengkap || 'Siswa'}</p>
               <p className="text-[10px] text-[#37352f]/50 font-bold uppercase tracking-wider mt-1">Portal Siswa</p>
@@ -134,7 +137,7 @@ export default function DetailSesi() {
             <div className="w-8 h-8 bg-[#efefed] rounded flex items-center justify-center text-sm font-bold text-[#37352f]">
               {studentInfo?.nama_lengkap?.charAt(0) || 'S'}
             </div>
-          </div>
+          </button>
         </header>
 
         <main className="flex-1 overflow-y-auto w-full px-4 md:px-8 py-6 md:py-12">

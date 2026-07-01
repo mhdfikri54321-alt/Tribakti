@@ -9,6 +9,8 @@ import {
   FileQuestion, 
   History, 
   Award,
+  HelpCircle,
+  User,
   LogOut,
   Menu,
   X
@@ -68,7 +70,8 @@ export default function Sidebar({ activeMenu }) {
     { id: 'materi', name: 'Materi Belajar', path: '/materi', icon: BookOpen },
     { id: 'ujian', name: 'Simulasi Ujian', path: '/ujian', icon: FileQuestion },
     { id: 'histori', name: 'Histori Ujian', path: '/histori', icon: History },
-    { id: 'sertifikat', name: 'E-Sertifikat', path: '/sertifikat', icon: Award }
+    { id: 'sertifikat', name: 'E-Sertifikat', path: '/sertifikat', icon: Award },
+    { id: 'bantuan', name: 'Bantuan & FAQ', path: '/bantuan', icon: HelpCircle }
   ];
 
   return (

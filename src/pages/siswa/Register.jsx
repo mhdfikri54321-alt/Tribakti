@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import logoTribakti from '../../assets/logo_tribaktii.png';
 import Swal from 'sweetalert2';
-import { UserPlus, User, Lock, ArrowRight, ChevronLeft } from 'lucide-react';
+import { UserPlus, User, Lock, ArrowRight, ChevronLeft, Eye, EyeOff } from 'lucide-react';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ export default function Register() {
     username: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -24,6 +25,18 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validasi minimal karakter password (minimal 8 karakter)
+    if (formData.password.length < 8) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Password Terlalu Pendek',
+        text: 'Password minimal harus terdiri dari 8 karakter!',
+        confirmButtonColor: '#37352f',
+        customClass: { popup: 'rounded-xl border border-[#e9e9e7]' }
+      });
+    }
+
     setLoading(true);
 
     try {
@@ -148,14 +161,25 @@ export default function Register() {
               <div className="relative group">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#37352f]/20 group-focus-within:text-[#0b6e99] transition-colors" />
                 <input 
-                  type="password" 
+                  type={showPassword ? "text" : "password"} 
                   name="password" 
                   value={formData.password} 
                   onChange={handleChange} 
                   required 
                   placeholder="••••••••"
-                  className="w-full bg-[#efefed] border-none rounded-xl pl-11 pr-4 py-3 text-sm font-medium focus:ring-1 focus:ring-[#0b6e99] outline-none transition-all" 
+                  className="w-full bg-[#efefed] border-none rounded-xl pl-11 pr-11 py-3 text-sm font-medium focus:ring-1 focus:ring-[#0b6e99] outline-none transition-all" 
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#37352f]/40 hover:text-[#0b6e99] transition-colors outline-none cursor-pointer flex items-center justify-center"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
               </div>
             </div>
 

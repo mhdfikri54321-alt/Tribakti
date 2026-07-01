@@ -70,6 +70,31 @@ export default function Pendaftaran() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validasi NIK (Tepat 16 digit angka)
+    const nikRegex = /^\d{16}$/;
+    if (!nikRegex.test(formData.nik)) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'NIK Tidak Valid',
+        text: 'NIK harus berupa 16 digit angka!',
+        confirmButtonColor: '#37352f',
+        customClass: { popup: 'rounded-xl border border-[#e9e9e7]' }
+      });
+    }
+
+    // Validasi Nomor WhatsApp (Format angka, diawali 08 atau 62, 9-15 digit)
+    const waRegex = /^(08|62)\d{7,13}$/;
+    if (!waRegex.test(formData.no_whatsapp)) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Nomor WhatsApp Tidak Valid',
+        text: 'Nomor WhatsApp harus berformat angka dan diawali dengan 08 atau 62 (9-15 digit)!',
+        confirmButtonColor: '#37352f',
+        customClass: { popup: 'rounded-xl border border-[#e9e9e7]' }
+      });
+    }
+
     if (!fileBukti) {
       return Swal.fire({
         icon: 'warning',

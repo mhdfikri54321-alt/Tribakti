@@ -108,8 +108,10 @@ export default function OwnerSidebar({ activeMenu }) {
 
         {/* Header Logo */}
         <div className="p-6 mb-4">
-          <div className="flex items-center gap-2">
-            <img src={logoTribakti} alt="Logo" className="w-8 h-8 object-contain" />
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-white border border-[#e9e9e7] rounded-xl flex items-center justify-center shadow-sm shrink-0">
+              <img src={logoTribakti} alt="Logo" className="w-8 h-8 object-contain" />
+            </div>
             <div>
               <div className="text-lg font-bold tracking-tight text-[#37352f]">
                 Tri<span className="text-[#0b6e99]">Bakti</span>

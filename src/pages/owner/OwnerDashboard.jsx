@@ -36,6 +36,7 @@ export default function OwnerDashboard() {
   const [packageChartData, setPackageChartData] = useState([]);
   const [latestRatings, setLatestRatings] = useState([]);
   const [topInstructors, setTopInstructors] = useState([]);
+  const [instructorRatingsList, setInstructorRatingsList] = useState([]);
   const [showRatingsModal, setShowRatingsModal] = useState(false);
   const [allRatings, setAllRatings] = useState([]);
   const [modalLoading, setModalLoading] = useState(false);
@@ -53,8 +54,8 @@ export default function OwnerDashboard() {
         supabase.from('akun_pengguna').select('id', { count: 'exact' }).eq('role', 'siswa'),
         supabase.from('pendaftaran').select('total_bayar, status, created_at, paket_pilihan'),
         supabase.from('jadwal_latihan').select('id', { count: 'exact' }).eq('status', 'Selesai'),
-        supabase.from('ratings').select('*').order('created_at', { ascending: false }).limit(3),
-        supabase.from('ratings').select('skor'),
+        supabase.from('ratings').select('*').not('paket_siswa', 'ilike', 'Instruktur:%').order('created_at', { ascending: false }).limit(3),
+        supabase.from('ratings').select('skor').not('paket_siswa', 'ilike', 'Instruktur:%'),
         supabase.from('jadwal_latihan').select(`
           instruktur_id,
           status,
@@ -122,6 +123,31 @@ export default function OwnerDashboard() {
         .sort((a, b) => b.count - a.count)
         .slice(0, 3);
 
+      // Ambil ulasan/rating instruktur
+      const { data: instRatings } = await supabase
+        .from('ratings')
+        .select('*')
+        .like('paket_siswa', 'Instruktur:%');
+
+      const instructorRatings = {};
+      (instRatings || []).forEach(r => {
+        const parts = r.paket_siswa.split('|');
+        const instPart = parts[0]?.replace('Instruktur:', '').trim();
+        if (instPart) {
+          if (!instructorRatings[instPart]) {
+            instructorRatings[instPart] = { name: instPart, sum: 0, count: 0 };
+          }
+          instructorRatings[instPart].sum += Number(r.skor) || 0;
+          instructorRatings[instPart].count += 1;
+        }
+      });
+
+      const parsedInstRatings = Object.values(instructorRatings).map(inst => ({
+        name: inst.name,
+        avgRating: (inst.sum / inst.count).toFixed(1),
+        count: inst.count
+      })).sort((a, b) => b.avgRating - a.avgRating);
+
       setStats({
         totalSiswa: resSiswa.count || 0,
         totalPendapatan: totalPendapatan,
@@ -134,6 +160,7 @@ export default function OwnerDashboard() {
       setPackageChartData(packageData);
       setLatestRatings(resRatings.data || []);
       setTopInstructors(sortedInstructors);
+      setInstructorRatingsList(parsedInstRatings);
     } catch (error) {
       console.error("Error fetching stats:", error);
     } finally {
@@ -148,6 +175,7 @@ export default function OwnerDashboard() {
       const { data, error } = await supabase
         .from('ratings')
         .select('*')
+        .not('paket_siswa', 'ilike', 'Instruktur:%')
         .order('created_at', { ascending: false });
       if (error) throw error;
       setAllRatings(data || []);
@@ -170,7 +198,10 @@ export default function OwnerDashboard() {
             <ChevronRight className="w-4 h-4 text-[#37352f]/30" />
             <span className="text-sm font-semibold">Owner Dashboard</span>
           </div>
-          <div className="flex items-center gap-3">
+          <button 
+            onClick={() => navigate('/profil')}
+            className="flex items-center gap-3 hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent text-[#37352f] text-left p-0"
+          >
             <div className="text-right hidden sm:block">
               <p className="text-sm font-semibold leading-none">{savedUser?.nama_lengkap || 'Owner'}</p>
               <p className="text-[10px] text-[#37352f]/50 font-bold uppercase tracking-wider mt-1">Owner</p>
@@ -178,7 +209,7 @@ export default function OwnerDashboard() {
             <div className="w-8 h-8 bg-[#efefed] rounded flex items-center justify-center text-sm font-bold text-[#37352f]">
               {(savedUser?.nama_lengkap || 'O').charAt(0)}
             </div>
-          </div>
+          </button>
         </header>
         
         <main className="flex-1 overflow-y-auto w-full px-4 md:px-8 py-6 md:py-12">
@@ -384,6 +415,49 @@ export default function OwnerDashboard() {
                 <div className="py-10 text-center text-xs opacity-50 italic flex-grow flex items-center justify-center">Belum ada riwayat sesi mengajar selesai.</div>
               )}
             </div>
+          </div>
+
+          {/* Laporan Kinerja & Rating Instruktur */}
+          <div className="bg-white p-5 sm:p-8 rounded-2xl border border-[#e9e9e7] shadow-sm mt-8">
+            <div className="mb-6">
+              <h3 className="text-lg md:text-xl font-bold text-[#37352f] flex items-center gap-2">
+                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                Laporan Kinerja & Rating Instruktur
+              </h3>
+              <p className="text-xs text-[#37352f]/50 mt-1">Akumulasi penilaian bintang dan umpan balik langsung dari siswa untuk setiap instruktur.</p>
+            </div>
+
+            {loading ? (
+              <div className="py-10 text-center text-xs opacity-50">Memuat data rating instruktur...</div>
+            ) : instructorRatingsList.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {instructorRatingsList.map((ins, i) => (
+                  <div key={i} className="bg-[#fbfbfa] p-6 rounded-xl border border-[#e9e9e7]/60 flex flex-col justify-between hover:border-[#0b6e99]/20 transition-all">
+                    <div>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs font-bold text-[#37352f]">{ins.name}</span>
+                        <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-2 py-0.5 rounded text-[10px] font-bold">
+                          <Star className="w-3.5 h-3.5 fill-current" />
+                          {ins.avgRating}
+                        </div>
+                      </div>
+                      <div className="w-full bg-[#efefed] h-1.5 rounded-full overflow-hidden mb-2">
+                        <div 
+                          className="bg-amber-400 h-full rounded-full"
+                          style={{ width: `${(Number(ins.avgRating) / 5) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="text-[9px] font-bold text-[#37352f]/40 uppercase tracking-wider mt-3 pt-3 border-t border-[#efefed] flex justify-between">
+                      <span>Total Di-review</span>
+                      <span>{ins.count} Siswa</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-10 text-center text-xs opacity-50 italic">Belum ada rating instruktur yang diinput oleh siswa.</div>
+            )}
           </div>
         </main>
         <Footer />

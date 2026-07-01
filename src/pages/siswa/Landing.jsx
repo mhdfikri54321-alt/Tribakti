@@ -104,7 +104,7 @@ export default function LandingPage() {
         supabase.from('packages').select('*').order('id', { ascending: true }),
         supabase.from('faq').select('*').order('created_at', { ascending: true }),
         supabase.from('artikel').select('*').order('tanggal', { ascending: false }),
-        supabase.from('ratings').select('*').order('created_at', { ascending: false }),
+        supabase.from('ratings').select('*').not('paket_siswa', 'ilike', 'Instruktur:%').order('created_at', { ascending: false }),
         supabase.from('dokumentasi').select('*').order('created_at', { ascending: false })
       ]);
 

@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import { 
-  ChevronRight, 
-  Sparkles, 
-  LayoutDashboard, 
-  Calendar, 
-  BookOpen, 
+import {
+  ChevronRight,
+  Sparkles,
+  LayoutDashboard,
+  Calendar,
+  BookOpen,
   FileQuestion,
   Trophy,
   ShieldCheck,
@@ -20,6 +20,7 @@ import {
 function DashboardSiswa() {
   const [user, setUser] = useState(null);
   const [listPaket, setListPaket] = useState([]);
+  const [progresSesi, setProgresSesi] = useState({ selesai: 0, total: 0 });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +53,27 @@ function DashboardSiswa() {
         .limit(1)
         .maybeSingle();
 
+      // Ambil data sesi latihan untuk progres belajar
+      const { data: sessions } = await supabase
+        .from('jadwal_latihan')
+        .select('status')
+        .eq('akun_id', userId);
+
+      let totalExpected = parseInt(userData.jumlah_sesi) || 0;
+      if (!totalExpected && pendaftaranData?.paket_pilihan) {
+        const lowerPaket = pendaftaranData.paket_pilihan.toLowerCase();
+        if (lowerPaket.includes('plus')) totalExpected = 11;
+        else if (lowerPaket.includes('basic')) totalExpected = 10;
+        else if (lowerPaket.includes('terampil')) totalExpected = 6;
+        else if (lowerPaket.includes('mahir')) totalExpected = 4;
+      }
+
+      const selesaiCount = sessions ? sessions.filter(s => s.status === 'Selesai').length : 0;
+      setProgresSesi({
+        selesai: selesaiCount,
+        total: totalExpected
+      });
+
       if (userData) {
         const finalUser = {
           ...userData,
@@ -72,7 +94,7 @@ function DashboardSiswa() {
         .from('packages')
         .select('*')
         .order('price', { ascending: true });
-      
+
       if (error) throw error;
       setListPaket(data || []);
     } catch (err) {
@@ -95,7 +117,10 @@ function DashboardSiswa() {
             <ChevronRight className="w-4 h-4 text-[#37352f]/30" />
             <span className="text-sm font-semibold">Dashboard</span>
           </div>
-          <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate('/profil')}
+            className="flex items-center gap-3 hover:opacity-85 transition-opacity cursor-pointer border-0 bg-transparent text-[#37352f] text-left p-0"
+          >
             <div className="text-right">
               <p className="text-sm font-semibold leading-none">{user?.nama_lengkap || 'Siswa'}</p>
               <p className="text-[10px] text-[#37352f]/50 font-bold uppercase tracking-wider mt-1">Portal Siswa</p>
@@ -103,11 +128,11 @@ function DashboardSiswa() {
             <div className="w-8 h-8 bg-[#efefed] rounded flex items-center justify-center text-sm font-bold text-[#37352f]">
               {user?.nama_lengkap?.charAt(0) || 'S'}
             </div>
-          </div>
+          </button>
         </header>
 
         <main className="flex-1 overflow-y-auto w-full px-4 md:px-8 py-6 md:py-12">
-          
+
           <div className="mb-12">
             <div className="inline-flex items-center gap-2 bg-[#efefed] text-[#37352f]/60 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest mb-4">
               <Sparkles className="w-3 h-3 text-[#0b6e99]" />
@@ -117,8 +142,8 @@ function DashboardSiswa() {
               Halo, {user?.nama_lengkap?.split(' ')[0] || 'Siswa'} 👋
             </h2>
             <p className="text-[#37352f]/70 text-lg leading-relaxed max-w-2xl font-medium">
-              {user?.paket 
-                ? `Anda saat ini terdaftar aktif dalam ${user.paket}. Mari lanjutkan progres belajar Anda.` 
+              {user?.paket
+                ? `Anda saat ini terdaftar aktif dalam ${user.paket}. Mari lanjutkan progres belajar Anda.`
                 : 'Pilih paket belajar terbaik untuk memulai perjalanan Anda mendapatkan SIM bersama TriBakti.'}
             </p>
           </div>
@@ -135,18 +160,18 @@ function DashboardSiswa() {
                       {paket.session_count} Sesi
                     </span>
                   </div>
-                  
+
                   <h3 className="text-xl font-bold mb-2">{paket.name}</h3>
                   <p className="text-[#37352f]/60 text-sm leading-relaxed mb-8 font-medium">
                     {paket.description}
                   </p>
-                  
+
                   <div className="flex items-center justify-between pt-6 border-t border-[#efefed]">
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-widest text-[#37352f]/40">Biaya Investasi</p>
                       <p className="text-lg font-bold">Rp {paket.price?.toLocaleString('id-ID')}</p>
                     </div>
-                    <button 
+                    <button
                       onClick={() => handleSelectPackage(paket)}
                       className="bg-[#37352f] text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-[#0b6e99] transition-all"
                     >
@@ -171,18 +196,26 @@ function DashboardSiswa() {
                         {user?.status_pendaftaran}
                       </span>
                     </div>
-                    <p className="text-sm font-medium text-[#37352f]/70 leading-relaxed max-w-2xl">
-                      {user?.status_pendaftaran === 'Menunggu Konfirmasi' 
-                        ? 'Pembayaran Anda sedang kami verifikasi. Fitur penjadwalan akan terbuka secara otomatis setelah disetujui oleh Admin.' 
+                    <p className="text-sm font-medium text-[#37352f]/70 leading-relaxed max-w-2xl mb-4">
+                      {user?.status_pendaftaran === 'Menunggu Konfirmasi'
+                        ? 'Pembayaran Anda sedang kami verifikasi. Fitur penjadwalan akan terbuka secara otomatis setelah disetujui oleh Admin.'
                         : `Anda terdaftar pada ${user.paket}. Silakan manfaatkan seluruh fitur di sidebar untuk memulai proses belajar.`}
                     </p>
+                    {(user?.status_pendaftaran === 'Aktif' || user?.status_pendaftaran === 'Berhasil') && (
+                      <button
+                        onClick={() => navigate('/siswa/kwitansi')}
+                        className="inline-flex items-center gap-2 bg-[#0b6e99] hover:bg-[#085a80] text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+                      >
+                        <CreditCard className="w-4 h-4" /> Unduh Kuitansi Pembayaran
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Quick Actions / Progress Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div 
+                <div
                   onClick={() => navigate('/jadwal')}
                   className="bg-white border border-[#e9e9e7] p-6 rounded-2xl hover:border-[#0b6e99]/30 hover:shadow-lg transition-all cursor-pointer group"
                 >
@@ -190,7 +223,7 @@ function DashboardSiswa() {
                   <h4 className="text-sm font-bold mb-1">Jadwal Kursus</h4>
                   <p className="text-[10px] font-medium text-[#37352f]/50">Atur sesi latihan Anda</p>
                 </div>
-                <div 
+                <div
                   onClick={() => navigate('/materi')}
                   className="bg-white border border-[#e9e9e7] p-6 rounded-2xl hover:border-[#0b6e99]/30 hover:shadow-lg transition-all cursor-pointer group"
                 >
@@ -198,7 +231,7 @@ function DashboardSiswa() {
                   <h4 className="text-sm font-bold mb-1">Materi Belajar</h4>
                   <p className="text-[10px] font-medium text-[#37352f]/50">Pelajari teori berkendara</p>
                 </div>
-                <div 
+                <div
                   onClick={() => navigate('/ujian-materi')}
                   className="bg-white border border-[#e9e9e7] p-6 rounded-2xl hover:border-[#0b6e99]/30 hover:shadow-lg transition-all cursor-pointer group"
                 >
@@ -206,7 +239,7 @@ function DashboardSiswa() {
                   <h4 className="text-sm font-bold mb-1">Ujian Materi</h4>
                   <p className="text-[10px] font-medium text-[#37352f]/50">Teori rambu & etika</p>
                 </div>
-                <div 
+                <div
                   onClick={() => navigate('/ujian-motorik')}
                   className="bg-white border border-[#e9e9e7] p-6 rounded-2xl hover:border-[#0b6e99]/30 hover:shadow-lg transition-all cursor-pointer group"
                 >
@@ -216,15 +249,61 @@ function DashboardSiswa() {
                 </div>
               </div>
 
+              {/* Progress Tracker Card */}
+              {user?.paket && progresSesi.total > 0 && (
+                <div className="bg-white border border-[#e9e9e7] rounded-2xl p-6 md:p-8 shadow-sm">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#0b6e99] bg-[#efefed] px-3 py-1 rounded-lg">Progres Latihan Praktik</span>
+                      <h3 className="text-lg font-bold mt-2 text-[#37352f]">Sesi Latihan Mengemudi</h3>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-sm font-semibold text-[#37352f]/50">Selesai: </span>
+                      <span className="text-lg font-bold text-[#0b6e99]">{progresSesi.selesai}</span>
+                      <span className="text-sm font-semibold text-[#37352f]/40"> / {progresSesi.total} Sesi</span>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar Container */}
+                  <div className="w-full bg-[#efefed] h-3 rounded-full overflow-hidden mb-2">
+                    <div
+                      className="bg-[#0b6e99] h-full rounded-full transition-all duration-500 ease-out"
+                      style={{ width: `${Math.min(100, (progresSesi.selesai / progresSesi.total) * 100)}%` }}
+                    ></div>
+                  </div>
+
+                  <div className="flex justify-between items-center text-[10px] font-bold text-[#37352f]/40 uppercase tracking-wider">
+                    <span>Mulai Belajar</span>
+                    <span>{Math.round((progresSesi.selesai / progresSesi.total) * 100)}% Kompeten</span>
+                  </div>
+                </div>
+              )}
+
               {/* Learning Journey / Step by Step */}
               <div className="bg-[#fbfbfa] border border-[#e9e9e7] rounded-2xl p-8">
                 <h3 className="text-lg font-bold mb-8">Alur Belajar TriBakti 🚀</h3>
                 <div className="space-y-6">
                   {[
-                    { title: 'Lengkapi Administrasi', desc: 'Selesaikan pendaftaran dan unggah bukti pembayaran.', status: (user?.status_pendaftaran === 'Aktif' || user?.status_pendaftaran === 'Berhasil') ? 'done' : 'current' },
-                    { title: 'Pelajari Teori', desc: 'Baca modul dan tonton video tutorial di menu Materi Belajar.', status: (user?.status_pendaftaran === 'Aktif' || user?.status_pendaftaran === 'Berhasil') ? 'pending' : 'pending' },
-                    { title: 'Booking Jadwal', desc: 'Pilih waktu dan instruktur untuk sesi latihan praktik.', status: 'pending' },
-                    { title: 'Selesaikan Latihan', desc: 'Selesaikan semua sesi latihan untuk mendapatkan e-sertifikat dari Admin.', status: 'pending' },
+                    {
+                      title: 'Lengkapi Administrasi',
+                      desc: 'Selesaikan pendaftaran dan unggah bukti pembayaran.',
+                      status: (user?.status_pendaftaran === 'Aktif' || user?.status_pendaftaran === 'Berhasil') ? 'done' : 'current'
+                    },
+                    {
+                      title: 'Pelajari Teori',
+                      desc: 'Baca modul dan tonton video tutorial di menu Materi Belajar.',
+                      status: (user?.status_pendaftaran !== 'Aktif' && user?.status_pendaftaran !== 'Berhasil') ? 'pending' : 'current'
+                    },
+                    {
+                      title: 'Booking Jadwal',
+                      desc: 'Pilih waktu dan instruktur untuk sesi latihan praktik.',
+                      status: (user?.status_pendaftaran !== 'Aktif' && user?.status_pendaftaran !== 'Berhasil') ? 'pending' : (progresSesi.total > 0 ? 'done' : 'current')
+                    },
+                    {
+                      title: 'Selesaikan Latihan',
+                      desc: 'Selesaikan semua sesi latihan untuk mendapatkan e-sertifikat dari Admin.',
+                      status: (progresSesi.total === 0) ? 'pending' : (progresSesi.selesai >= progresSesi.total ? 'done' : 'current')
+                    },
                   ].map((step, idx) => (
                     <div key={idx} className="flex gap-4">
                       <div className="flex flex-col items-center">

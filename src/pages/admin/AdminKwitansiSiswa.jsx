@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import logoTribakti from '../../assets/logo_tribaktii.png';
-import { ArrowLeft, Printer } from 'lucide-react';
+import { ArrowLeft, Printer, Download } from 'lucide-react';
+import * as htmlToImage from 'html-to-image';
+import { jsPDF } from 'jspdf';
 
 export default function AdminKwitansiSiswa() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ export default function AdminKwitansiSiswa() {
   const [siswaInfo, setSiswaInfo] = useState(null);
   const [paketInfo, setPaketInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
+  const kwitansiRef = useRef(null);
   const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
@@ -81,6 +85,39 @@ export default function AdminKwitansiSiswa() {
     window.print();
   };
 
+  const handleDownloadPDF = async () => {
+    if (!kwitansiRef.current) return;
+    setDownloading(true);
+    try {
+      await document.fonts.ready;
+      
+      const width = kwitansiRef.current.offsetWidth;
+      const height = kwitansiRef.current.offsetHeight;
+
+      const dataUrl = await htmlToImage.toPng(kwitansiRef.current, {
+        width: width,
+        height: height,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+        cacheBust: true,
+      });
+
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [width, height]
+      });
+
+      pdf.addImage(dataUrl, 'PNG', 0, 0, width, height);
+      pdf.save(`Kwitansi-TriBakti-${siswaInfo?.nama_lengkap || 'Siswa'}.pdf`);
+    } catch (err) {
+      console.error("Gagal mengunduh PDF:", err);
+      alert("Gagal mengunduh kwitansi sebagai PDF.");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-[#fbfbfa] text-[#37352f]">
@@ -109,16 +146,29 @@ export default function AdminKwitansiSiswa() {
           <ArrowLeft className="w-4 h-4" /> Kembali
         </button>
 
-        <button 
-          onClick={handlePrint}
-          className="flex items-center gap-2 bg-[#0b6e99] hover:bg-[#085a80] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-[#0b6e99]/15 cursor-pointer"
-        >
-          <Printer className="w-4 h-4" /> Cetak Kwitansi
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={handleDownloadPDF}
+            disabled={downloading}
+            className="flex items-center gap-2 bg-white border border-[#e9e9e7] text-[#37352f] px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm hover:bg-[#efefed] cursor-pointer disabled:opacity-50"
+          >
+            {downloading ? (
+              <div className="w-4 h-4 border-2 border-[#37352f]/20 border-t-[#37352f] rounded-full animate-spin"></div>
+            ) : <Download className="w-4 h-4" />}
+            Unduh PDF
+          </button>
+          
+          <button 
+            onClick={handlePrint}
+            className="flex items-center gap-2 bg-[#0b6e99] hover:bg-[#085a80] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-[#0b6e99]/15 cursor-pointer"
+          >
+            <Printer className="w-4 h-4" /> Cetak Kwitansi
+          </button>
+        </div>
       </div>
 
       {/* Tampilan Kwitansi (Style Cetak) */}
-      <div className="w-full max-w-3xl bg-white border border-[#e9e9e7] shadow-lg rounded-2xl p-8 md:p-12 relative overflow-hidden print:shadow-none print:border-none print:p-0">
+      <div ref={kwitansiRef} className="w-full max-w-3xl bg-white border border-[#e9e9e7] shadow-lg rounded-2xl p-8 md:p-12 relative overflow-hidden print:shadow-none print:border-none print:p-0">
         
         {/* Header Kwitansi */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b-2 border-[#37352f] pb-6 mb-8">

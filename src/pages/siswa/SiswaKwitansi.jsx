@@ -1,39 +1,45 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import logoTribakti from '../../assets/logo_tribaktii.png';
 import { ArrowLeft, Printer, Download } from 'lucide-react';
 import * as htmlToImage from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
-export default function OwnerKwitansiSiswa() {
+export default function SiswaKwitansi() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get('id');
-
   const [siswaInfo, setSiswaInfo] = useState(null);
   const [paketInfo, setPaketInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
   const kwitansiRef = useRef(null);
   const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const akunId = savedUser?.id;
 
   useEffect(() => {
-    if (id) {
+    if (akunId) {
       fetchKwitansiData();
+    } else {
+      navigate('/login');
     }
-  }, [id]);
+  }, [akunId]);
 
   const fetchKwitansiData = async () => {
     setLoading(true);
     try {
-      // 1. Ambil pendaftaran
+      // 1. Ambil pendaftaran milik siswa yang aktif
       const { data: siswaData, error: errSiswa } = await supabase
         .from('pendaftaran')
         .select('*')
-        .eq('id', id)
-        .single();
+        .eq('akun_id', akunId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
       if (errSiswa) throw errSiswa;
+      if (!siswaData) {
+        throw new Error("Pendaftaran tidak ditemukan.");
+      }
       setSiswaInfo(siswaData);
 
       // 2. Ambil harga paket dari packages
@@ -47,7 +53,6 @@ export default function OwnerKwitansiSiswa() {
       }
     } catch (err) {
       console.error("Gagal memuat data kwitansi:", err.message);
-      alert("Gagal memuat data kwitansi: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -129,8 +134,9 @@ export default function OwnerKwitansiSiswa() {
 
   if (!siswaInfo) {
     return (
-      <div className="p-8 text-center text-rose-500 font-bold">
-        Data kwitansi tidak ditemukan atau URL tidak valid.
+      <div className="p-8 text-center text-rose-500 font-bold bg-[#fbfbfa] min-h-screen flex flex-col items-center justify-center">
+        <p className="mb-4">Data pendaftaran/pembayaran belum disetujui atau tidak ditemukan.</p>
+        <button onClick={() => navigate('/dashboard')} className="bg-[#37352f] text-white px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-[#0b6e99] transition-all">Kembali ke Dashboard</button>
       </div>
     );
   }
@@ -140,7 +146,7 @@ export default function OwnerKwitansiSiswa() {
       {/* Tombol Aksi (Sembunyi saat cetak) */}
       <div className="w-full max-w-3xl flex justify-between items-center mb-6 print:hidden">
         <button 
-          onClick={() => navigate(`/owner/siswa/detail?id=${siswaInfo.id}`)}
+          onClick={() => navigate('/dashboard')}
           className="flex items-center gap-2 text-xs font-bold text-[#37352f]/60 hover:text-[#37352f] transition-all uppercase tracking-wider cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" /> Kembali
@@ -217,7 +223,7 @@ export default function OwnerKwitansiSiswa() {
           <div className="grid grid-cols-3 gap-2 border-b border-[#efefed] pb-3 items-center">
             <span className="text-xs font-bold text-[#37352f]/40 uppercase tracking-wider">Status Pembayaran</span>
             <span className="col-span-2">
-              <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 border-emerald-100 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest">
+              <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 border border-emerald-100 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest">
                 Lunas / Paid
               </span>
             </span>
@@ -236,7 +242,7 @@ export default function OwnerKwitansiSiswa() {
               Payakumbuh, {new Date(siswaInfo.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
             <div className="border-b border-[#37352f]/40 w-44 mx-auto mb-1 font-bold text-[#37352f]">
-              {savedUser?.nama_lengkap || 'Owner'}
+              Administrator
             </div>
             <p className="text-[10px] font-bold text-[#37352f]/40 uppercase tracking-wider">LPK TRI BAKTI</p>
           </div>

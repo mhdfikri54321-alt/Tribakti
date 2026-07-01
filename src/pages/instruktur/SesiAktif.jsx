@@ -19,6 +19,7 @@ export default function SesiAktif() {
   const [jadwalAktif, setJadwalAktif] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterTanggal, setFilterTanggal] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
   
   const [showModalSelesai, setShowModalSelesai] = useState(false);
   const [selectedJadwal, setSelectedJadwal] = useState(null);
@@ -58,7 +59,12 @@ export default function SesiAktif() {
 
   const filteredJadwal = jadwalAktif.filter((item) => {
     if (!filterTanggal) return true;
-    const tanggalItem = item.tanggal_waktu ? new Date(item.tanggal_waktu).toISOString().split('T')[0] : '';
+    if (!item.tanggal_waktu) return false;
+    const dateObj = new Date(item.tanggal_waktu);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const tanggalItem = `${year}-${month}-${day}`;
     return tanggalItem === filterTanggal;
   });
 
@@ -89,6 +95,67 @@ export default function SesiAktif() {
       fetchSesiAktif();
     } catch (err) {
       alert("Gagal: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleApproveReschedule = async (item) => {
+    if (!window.confirm("Apakah Anda yakin ingin menyetujui pengajuan reschedule ini?")) return;
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('jadwal_latihan')
+        .update({ 
+          status: 'Dijadwalkan',
+          catatan_instruktur: null 
+        })
+        .eq('id', item.id);
+        
+      if (error) throw error;
+      
+      alert("Pengajuan reschedule berhasil disetujui!");
+      fetchSesiAktif();
+    } catch (err) {
+      alert("Gagal menyetujui: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRejectReschedule = async (item) => {
+    if (!window.confirm("Apakah Anda yakin ingin menolak pengajuan reschedule ini? Status jadwal akan di-reset menjadi Belum Dijadwalkan.")) return;
+    setLoading(true);
+    try {
+      if (item.tanggal_waktu) {
+         const newDate = new Date(item.tanggal_waktu);
+         const newTanggal = newDate.toLocaleDateString('en-CA'); 
+         const newJam = `${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}`;
+
+         await supabase
+          .from('slot_instruktur')
+          .update({ status: 'Tersedia' })
+          .eq('instruktur_id', item.instruktur_id)
+          .eq('tanggal', newTanggal)
+          .eq('jam', newJam);
+      }
+
+      const { error } = await supabase
+        .from('jadwal_latihan')
+        .update({ 
+          status: 'Belum Dijadwalkan',
+          tanggal_waktu: null,
+          instruktur_id: null,
+          catatan_instruktur: 'Reschedule ditolak oleh Instruktur.' 
+        })
+        .eq('id', item.id);
+        
+      if (error) throw error;
+      
+      alert("Pengajuan reschedule berhasil ditolak.");
+      fetchSesiAktif();
+    } catch (err) {
+      alert("Gagal menolak: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -129,22 +196,27 @@ export default function SesiAktif() {
               <p className="text-[#37352f]/70 text-sm md:text-lg max-w-2xl leading-relaxed font-medium">
                 Daftar seluruh sesi yang perlu Anda ajarkan. Pantau kehadiran dan berikan evaluasi langsung kepada siswa.
               </p>
-              <div className="relative w-64 group">
-                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#37352f]/30 group-focus-within:text-[#0b6e99] transition-colors pointer-events-none" />
-                
-                {/* Placeholder overlay */}
-                {!filterTanggal && (
-                  <span className="absolute left-11 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#37352f]/40 pointer-events-none font-sans">
-                    Pilih tanggal filter...
-                  </span>
+              <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+                {filterTanggal && (
+                  <button 
+                    onClick={() => setFilterTanggal('')} 
+                    className="px-4 py-2 bg-[#efefed] hover:bg-red-50 text-[#37352f]/60 hover:text-red-600 border border-[#e9e9e7] rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all"
+                  >
+                    Lihat Semua ✕
+                  </button>
                 )}
-                
-                <input 
-                  type="date" 
-                  className={`w-full bg-white border border-[#e9e9e7] rounded-xl pl-11 pr-4 py-3 text-xs font-semibold outline-none transition-all focus:border-[#0b6e99]/30 cursor-pointer min-h-[46px] ${filterTanggal ? 'text-[#37352f]' : 'text-transparent'}`}
-                  value={filterTanggal}
-                  onChange={(e) => setFilterTanggal(e.target.value)}
-                />
+                <div className="relative w-64 group">
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#37352f]/30 group-focus-within:text-[#0b6e99] transition-colors pointer-events-none" />
+                  <input 
+                    type={isFocused || filterTanggal ? "date" : "text"}
+                    placeholder="Pilih tanggal filter..."
+                    className="w-full bg-white border border-[#e9e9e7] rounded-xl pl-11 pr-4 py-3 text-xs font-semibold outline-none transition-all focus:border-[#0b6e99]/30 cursor-pointer min-h-[46px] text-[#37352f]"
+                    value={filterTanggal}
+                    onChange={(e) => setFilterTanggal(e.target.value)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -188,12 +260,36 @@ export default function SesiAktif() {
                           </div>
                         </td>
                         <td className="p-6">
-                          <span className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest ${item.status === 'Selesai' ? 'bg-emerald-50 text-emerald-700' : 'bg-[#efefed] text-[#0b6e99]'}`}>
+                          <span className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest ${
+                            item.status === 'Selesai' ? 'bg-emerald-50 text-emerald-700' : 
+                            item.status === 'Pengajuan Reschedule' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
+                            'bg-[#efefed] text-[#0b6e99]'
+                          }`}>
                             {item.status || 'Belum Dimulai'}
                           </span>
+                          {item.status === 'Pengajuan Reschedule' && item.catatan_instruktur && (
+                            <div className="text-[9px] text-[#0b6e99] font-bold uppercase tracking-wider mt-1.5 max-w-xs leading-relaxed italic">
+                              {item.catatan_instruktur}
+                            </div>
+                          )}
                         </td>
                         <td className="p-6 text-center">
-                          {item.status !== 'Selesai' ? (
+                          {item.status === 'Pengajuan Reschedule' ? (
+                            <div className="flex justify-center gap-2">
+                              <button 
+                                onClick={() => handleApproveReschedule(item)} 
+                                className="px-4 py-2 bg-[#0b6e99] hover:bg-[#085a80] text-white rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer"
+                              >
+                                Setujui
+                              </button>
+                              <button 
+                                onClick={() => handleRejectReschedule(item)} 
+                                className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer"
+                              >
+                                Tolak
+                              </button>
+                            </div>
+                          ) : item.status !== 'Selesai' ? (
                             <button 
                               onClick={() => handleBukaPenyelesaian(item)} 
                               className="px-6 py-3 bg-[#37352f] hover:bg-[#0b6e99] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all"

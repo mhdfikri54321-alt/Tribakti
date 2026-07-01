@@ -208,3 +208,182 @@ body {
   margin: 0;
   margin: 0mm;
 }
+
+/* Global Dark Mode Overrides */
+.dark {
+  --color-bg-light: #0f172a;
+  --color-bg-card: #1e293b;
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border-subtle: #334155;
+}
+
+.dark body {
+  color: #f8fafc;
+}
+
+.dark body,
+.dark .bg-\[\#fbfbfa\],
+.dark .bg-bg-light {
+  background-color: #0f172a !important;
+}
+
+.dark .bg-white,
+.dark .bg-bg-card,
+.dark header,
+.dark .bg-white\/50,
+.dark .bg-\[\#ffffff\],
+.dark .bg-white\/70 {
+  background-color: #1e293b !important;
+}
+
+.dark .bg-\[\#efefed\],
+.dark .bg-slate-50,
+.dark .bg-\[\#fbfbfa\]\/50,
+.dark .bg-\[\#f1f1ef\],
+.dark .bg-white\/80 {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+}
+
+.dark .bg-\[\#efefed\],
+.dark .bg-slate-50,
+.dark .bg-\[\#fbfbfa\]\/50,
+.dark .bg-\[\#f1f1ef\] {
+  background-color: #334155 !important;
+}
+
+.dark .text-\[\#37352f\],
+.dark .text-\[\#37352F\],
+.dark .text-black,
+.dark .text-slate-900,
+.dark .text-slate-700,
+.dark .text-slate-800,
+.dark .text-text-main {
+  color: #f8fafc !important;
+}
+
+.dark .text-\[\#37352f\]\/70,
+.dark .text-\[\#37352F\]\/70,
+.dark .text-\[\#37352f\]\/60,
+.dark .text-\[\#37352F\]\/60,
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-\[\#37352f\]\/50,
+.dark .text-\[\#37352F\]\/50,
+.dark .text-\[\#37352f\]\/40,
+.dark .text-\[\#37352F\]\/40,
+.dark .text-\[\#37352f\]\/30,
+.dark .text-\[\#37352F\]\/30,
+.dark .text-\[rgba\(55\,53\,47\,0\.4\)\],
+.dark .text-text-muted {
+  color: #94a3b8 !important;
+}
+
+.dark .border-\[\#e9e9e7\],
+.dark .border-\[\#efefed\],
+.dark .border-\[\#f1f1ef\],
+.dark .border-border-subtle,
+.dark .border-slate-100 {
+  border-color: #334155 !important;
+}
+
+.dark .border-\[\#e9e9e7\]\/50 {
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+.dark .divide-\[\#e9e9e7\] > * + *,
+.dark .divide-\[\#efefed\] > * + *,
+.dark .divide-y > * + * {
+  border-color: #334155 !important;
+}
+
+.dark input, 
+.dark select, 
+.dark textarea {
+  background-color: #334155 !important;
+  color: #f8fafc !important;
+  border-color: #475569 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Sidebar Hover & Sidebar Backgrounds */
+.dark aside,
+.dark nav {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+}
+
+.dark .hover\:bg-\[\#fbfbfa\]:hover,
+.dark .hover\:bg-\[\#efefed\]:hover,
+.dark .hover\:bg-\[\#f1f1ef\]:hover,
+.dark .hover\:bg-slate-50:hover {
+  background-color: #1e293b !important;
+}
+
+/* Fix specific colors in SweetAlert popups in dark mode */
+.dark .swal2-popup {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+}
+.dark .swal2-title {
+  color: #f8fafc !important;
+}
+.dark .swal2-html-container {
+  color: #cbd5e1 !important;
+}
+
+/* Keep Specific Logo Wrappers White in Dark Mode for visibility */
+.dark div.rounded-lg:has(> img[src*="logo_tribakti"]),
+.dark div.rounded-xl:has(> img[src*="logo_tribakti"]),
+.dark div.rounded-2xl:has(> img[src*="logo_tribakti"]),
+.dark div.w-12:has(> img[src*="logo_tribakti"]),
+.dark div.w-14:has(> img[src*="logo_tribakti"]),
+.dark div.w-16:has(> img[src*="logo_tribakti"]),
+.dark div.aspect-\[4\/3\]:has(> img[src*="logo_tribakti"]) {
+  background-color: #ffffff !important;
+}
+
+/* 1. Glassmorphism Headers */
+header {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.dark header {
+  background-color: rgba(30, 41, 59, 0.75) !important;
+}
+
+/* 2. Tactile Sidebar Buttons Hover Transition */
+aside nav button {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+aside nav button:hover {
+  transform: translateX(4px);
+}
+
+/* 3. Glide-In Animation for Dashboard Cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main > div > div, 
+main > div > section {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
