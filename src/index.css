@@ -341,13 +341,13 @@ body {
 }
 
 /* Keep Specific Logo Wrappers White in Dark Mode for visibility */
-.dark div.rounded-lg:has(> img[src*="logo_tribakti"]),
-.dark div.rounded-xl:has(> img[src*="logo_tribakti"]),
-.dark div.rounded-2xl:has(> img[src*="logo_tribakti"]),
-.dark div.w-12:has(> img[src*="logo_tribakti"]),
-.dark div.w-14:has(> img[src*="logo_tribakti"]),
-.dark div.w-16:has(> img[src*="logo_tribakti"]),
-.dark div.aspect-\[4\/3\]:has(> img[src*="logo_tribakti"]) {
+.dark div.rounded-lg:has(> img[src*="logo_tribakti"]):not(.exclude-dark-white),
+.dark div.rounded-xl:has(> img[src*="logo_tribakti"]):not(.exclude-dark-white),
+.dark div.rounded-2xl:has(> img[src*="logo_tribakti"]):not(.exclude-dark-white),
+.dark div.w-12:has(> img[src*="logo_tribakti"]):not(.exclude-dark-white),
+.dark div.w-14:has(> img[src*="logo_tribakti"]):not(.exclude-dark-white),
+.dark div.w-16:has(> img[src*="logo_tribakti"]):not(.exclude-dark-white),
+.dark div.aspect-\[4\/3\]:has(> img[src*="logo_tribakti"]):not(.exclude-dark-white) {
   background-color: #ffffff !important;
 }
 

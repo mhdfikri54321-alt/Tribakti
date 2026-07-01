@@ -199,7 +199,7 @@ export default function LandingPage() {
 
         {/* HERO LOGO DISPLAY */}
         <div className="relative group">
-          <div className="relative rounded-2xl overflow-hidden border border-[#e9e9e7] shadow-2xl aspect-[4/3] bg-[#fbfbfa] flex items-center justify-center p-12">
+          <div className="relative rounded-2xl overflow-hidden border border-[#e9e9e7] shadow-2xl aspect-[4/3] bg-[#fbfbfa] flex items-center justify-center p-12 exclude-dark-white">
             <img src={logoTribakti} alt="Logo TriBakti" className="w-full h-full object-contain" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
           </div>
