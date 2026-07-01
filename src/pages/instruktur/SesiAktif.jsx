@@ -42,7 +42,10 @@ export default function SesiAktif() {
         .from('jadwal_latihan')
         .select(`
           *, 
-          akun_pengguna!akun_id(nama_lengkap), 
+          akun_pengguna!akun_id(
+            nama_lengkap,
+            pendaftaran(no_whatsapp)
+          ), 
           kurikulum(materi)
         `)
         .eq('instruktur_id', instrukturId)
@@ -237,8 +240,24 @@ export default function SesiAktif() {
                     {filteredJadwal.map((item) => (
                       <tr key={item.id} className="hover:bg-[#fbfbfa] transition-colors group">
                         <td className="p-6">
-                          <div className="font-semibold text-[#37352f] group-hover:text-[#0b6e99] transition-colors">
-                            {item.akun_pengguna?.nama_lengkap}
+                          <div className="font-semibold text-[#37352f] group-hover:text-[#0b6e99] transition-colors flex items-center gap-2 flex-wrap">
+                            <span>{item.akun_pengguna?.nama_lengkap}</span>
+                            {item.akun_pengguna?.pendaftaran?.[0]?.no_whatsapp && (
+                              <a
+                                href={`https://wa.me/${item.akun_pengguna.pendaftaran[0].no_whatsapp.replace(/^0/, '62')}?text=${encodeURIComponent(
+                                  `Halo ${item.akun_pengguna?.nama_lengkap || 'Siswa'}, saya ${namaInstruktur} selaku instruktur TriBakti Anda. Mengingatkan jadwal latihan kita pada tanggal ${item.tanggal_waktu ? new Date(item.tanggal_waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} pukul ${item.tanggal_waktu ? new Date(item.tanggal_waktu).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }).replace('.', ':') : ''} WIB dengan materi: ${item.kurikulum?.materi || 'Materi Belajar'}. Mohon bersiap ya!`
+                                )}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366] hover:text-white px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wide transition-all border border-emerald-500/20"
+                                title="Kirim Pengingat Jadwal via WhatsApp"
+                              >
+                                <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.224-3.82c1.516.903 3.076 1.382 4.672 1.383 5.501 0 9.975-4.474 9.977-9.977.001-2.669-1.038-5.176-2.927-7.065-1.889-1.889-4.396-2.928-7.062-2.929-5.503 0-9.978 4.475-9.981 9.977-.001 1.77.464 3.491 1.343 5.013l-1.008 3.676 3.786-.993zm11.333-7.633c-.301-.15-1.781-.879-2.056-.979-.275-.1-.475-.15-.675.15-.199.299-.775.979-.95 1.178-.175.199-.35.225-.65.075-.301-.15-1.267-.467-2.414-1.49-.893-.795-1.495-1.777-1.671-2.076-.175-.3-.019-.463.13-.612.135-.133.301-.35.451-.524.15-.175.2-.299.3-.5.1-.199.05-.375-.025-.524-.075-.15-.675-1.626-.925-2.227-.244-.583-.493-.503-.675-.512-.175-.01-.375-.011-.575-.011s-.525.075-.8.375c-.275.3-1.05 1.026-1.05 2.503s1.075 2.903 1.225 3.103c.15.199 2.115 3.227 5.125 4.525.715.309 1.274.494 1.708.632.719.228 1.373.196 1.89.119.577-.086 1.781-.727 2.031-1.427.25-.699.25-1.299.175-1.427-.075-.125-.275-.199-.575-.349z"/>
+                                </svg>
+                                WhatsApp
+                              </a>
+                            )}
                           </div>
                           <div className="text-[10px] font-bold uppercase tracking-widest text-[#37352f]/40 mt-1">Siswa Aktif</div>
                         </td>
