@@ -297,9 +297,9 @@ export default function OwnerLaporanKinerjaInstruktur() {
         <OwnerSidebar activeMenu="laporan-kinerja" />
       </div>
 
-      <div className="flex-1 flex flex-col min-w-0 print:bg-white print:text-black">
-        {/* Header hidden when printing */}
-        <header className="px-4 md:px-8 pl-14 md:pl-8 py-4 flex justify-between items-center border-b border-[#e9e9e7] bg-white sticky top-0 z-10 print:hidden">
+      <div className="flex-1 flex flex-col min-w-0 print:hidden">
+        {/* Header */}
+        <header className="px-4 md:px-8 pl-14 md:pl-8 py-4 flex justify-between items-center border-b border-[#e9e9e7] bg-white sticky top-0 z-10">
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-medium text-[#37352f]/60">Menu</h1>
             <ChevronRight className="w-4 h-4 text-[#37352f]/30" />
@@ -316,9 +316,9 @@ export default function OwnerLaporanKinerjaInstruktur() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto w-full px-4 md:px-8 py-6 md:py-12 print:p-0">
+        <main className="flex-1 overflow-y-auto w-full px-4 md:px-8 py-6 md:py-12">
           {/* Back Button and Title Section */}
-          <div className="mb-8 md:mb-10 print:hidden">
+          <div className="mb-8 md:mb-10">
             <div className="mb-4">
               <button 
                 onClick={() => navigate('/owner')}
@@ -352,8 +352,8 @@ export default function OwnerLaporanKinerjaInstruktur() {
             </div>
           </div>
 
-          {/* Stats Grid print:hidden */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 print:hidden">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
             {[
               { label: 'Rating Rata-rata Global', value: loading ? '...' : `${avgRatingGlobal} / 5.0`, icon: Star, color: 'text-amber-500 fill-amber-500', bg: 'bg-amber-50' },
               { label: 'Total Review Siswa', value: loading ? '...' : `${totalReviewsGlobal} Ulasan`, icon: MessageSquare, color: 'text-[#0b6e99]', bg: 'bg-[#0b6e99]/10' },
@@ -372,8 +372,8 @@ export default function OwnerLaporanKinerjaInstruktur() {
             ))}
           </div>
 
-          {/* Main Layout (Master-Detail) print:hidden */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start print:hidden">
+          {/* Main Layout (Master-Detail) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             {/* Left Panel: Instructors List (Master) */}
             <div className="bg-white rounded-2xl border border-[#e9e9e7] p-5 shadow-sm lg:col-span-1 flex flex-col h-[750px]">
               <div className="mb-4">
@@ -617,120 +617,117 @@ export default function OwnerLaporanKinerjaInstruktur() {
               )}
             </div>
           </div>
+        </main>
 
-          {/* PRINT-ONLY VIEW */}
-          <div className="hidden print:block bg-white text-black p-8 font-sans w-full max-w-[21cm] min-h-[29.7cm] border border-black/10 mx-auto text-xs">
-            {/* Header Kop LPK */}
-            <div className="flex items-center justify-between border-b-2 border-black pb-4 mb-6">
-              <div className="flex items-center gap-3">
-                <img src={logoTribakti} alt="Logo" className="w-12 h-12 object-contain" />
-                <div>
-                  <div className="text-xl font-bold tracking-tight uppercase text-black">
-                    LPK Tri<span className="text-[#0b6e99]">Bakti</span>
-                  </div>
-                  <div className="text-[9px] text-gray-500 font-semibold">
-                    Jasa Kursus Mengemudi Profesional & Berizin Resmi
-                  </div>
-                  <div className="text-[9px] text-gray-500 font-medium mt-0.5">
-                    Jl. Gatot Subroto No.50, Ibuh, Payakumbuh Barat, Payakumbuh
-                  </div>
-                </div>
+        <Footer />
+      </div>
+
+      {/* PRINT-ONLY VIEW */}
+      <div className="hidden print:block bg-white text-black p-8 font-sans w-full max-w-[21cm] min-h-[29.7cm] border border-black/10 mx-auto text-xs">
+        {/* Header Kop LPK */}
+        <div className="flex items-center justify-between border-b-2 border-black pb-4 mb-6">
+          <div className="flex items-center gap-3">
+            <img src={logoTribakti} alt="Logo" className="w-12 h-12 object-contain" />
+            <div>
+              <div className="text-xl font-bold tracking-tight uppercase text-black">
+                LPK Tri<span className="text-[#0b6e99]">Bakti</span>
               </div>
-              <div className="text-right">
-                <h2 className="text-base font-bold uppercase tracking-wider text-black">Laporan Kinerja & Rating Instruktur</h2>
-                <p className="text-[10px] font-mono text-gray-500">Tanggal Cetak: {new Date().toLocaleDateString('id-ID')}</p>
+              <div className="text-[9px] text-gray-500 font-semibold">
+                Jasa Kursus Mengemudi Profesional & Berizin Resmi
               </div>
-            </div>
-
-            {/* Print Metadata */}
-            <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-2 gap-4 text-xs">
-              <div>
-                <p className="font-semibold text-gray-500 uppercase text-[9px] tracking-wider">Dicetak Oleh</p>
-                <p className="font-bold text-black mt-0.5">{savedUser?.nama_lengkap || 'Owner'} (Owner)</p>
-              </div>
-              <div className="text-right">
-                <p className="font-semibold text-gray-500 uppercase text-[9px] tracking-wider">Ringkasan Sistem</p>
-                <p className="font-bold text-black mt-0.5">Total Instruktur: {processedInstructors.length} | Total Review: {totalReviewsGlobal} Ulasan</p>
-              </div>
-            </div>
-
-            {/* Table of Instructor Performance */}
-            <h3 className="text-sm font-bold mb-2 uppercase border-b pb-1 text-black">Tabel Rekapitulasi Kinerja</h3>
-            <table className="w-full text-left border-collapse border border-gray-300 mb-8">
-              <thead>
-                <tr className="bg-gray-100 border-b border-gray-300 text-[10px] font-bold">
-                  <th className="px-3 py-2 border-r border-gray-300 text-center w-10">No</th>
-                  <th className="px-3 py-2 border-r border-gray-300">Nama Instruktur</th>
-                  <th className="px-3 py-2 border-r border-gray-300 text-center">Rating Rata-rata</th>
-                  <th className="px-3 py-2 border-r border-gray-300 text-center">Jumlah Ulasan Siswa</th>
-                  <th className="px-3 py-2 text-center">Total Jam Sesi Selesai</th>
-                </tr>
-              </thead>
-              <tbody>
-                {processedInstructors.map((inst, idx) => (
-                  <tr key={inst.id} className="border-b border-gray-300 text-xs">
-                    <td className="px-3 py-2 border-r border-gray-300 text-center">{idx + 1}</td>
-                    <td className="px-3 py-2 border-r border-gray-300 font-semibold">{inst.nama_lengkap || inst.username || 'Tanpa Nama'}</td>
-                    <td className="px-3 py-2 border-r border-gray-300 text-center font-bold text-amber-600">{inst.avgRating > 0 ? `${inst.avgRating.toFixed(1)} ★` : '-'}</td>
-                    <td className="px-3 py-2 border-r border-gray-300 text-center font-mono">{inst.totalReviews} Ulasan</td>
-                    <td className="px-3 py-2 text-center font-mono">{inst.completedSessions} Sesi</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Detailed Reviews per Instructor */}
-            <h3 className="text-sm font-bold mb-3 uppercase border-b pb-1 text-black">Detail Review Siswa per Instruktur</h3>
-            <div className="space-y-6">
-              {processedInstructors.map((inst, idx) => (
-                <div key={inst.id} className="keep-together">
-                  <h4 className="font-bold text-xs text-[#0b6e99] mb-2">{idx + 1}. {inst.nama_lengkap || inst.username || 'Tanpa Nama'} ({inst.avgRating.toFixed(1)} ★ / {inst.totalReviews} Ulasan)</h4>
-                  
-                  {inst.reviews && inst.reviews.length > 0 ? (
-                    <table className="w-full text-left border-collapse border border-gray-200 text-[10px] mb-4">
-                      <thead>
-                        <tr className="bg-gray-50 border-b border-gray-200 font-bold text-gray-500">
-                          <th className="px-2 py-1 w-24">Nama Siswa</th>
-                          <th className="px-2 py-1 w-12 text-center">Rating</th>
-                          <th className="px-2 py-1">Ulasan / Umpan Balik</th>
-                          <th className="px-2 py-1 w-20 text-center">Sesi</th>
-                          <th className="px-2 py-1 w-16 text-right">Tanggal</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {inst.reviews.map((rev, rIdx) => (
-                          <tr key={rev.id || rIdx} className="border-b border-gray-150">
-                            <td className="px-2 py-1.5 font-medium">{rev.nama_siswa || 'Siswa'}</td>
-                            <td className="px-2 py-1.5 text-center font-bold text-amber-600">{rev.skor} ★</td>
-                            <td className="px-2 py-1.5 italic text-gray-700">"{rev.ulasan || 'Tanpa ulasan tertulis.'}"</td>
-                            <td className="px-2 py-1.5 text-center text-gray-500">{rev.sesi_info?.split('|')[0] || rev.sesi_info}</td>
-                            <td className="px-2 py-1.5 text-right font-mono text-gray-500">{rev.created_at ? new Date(rev.created_at).toLocaleDateString('id-ID') : '-'}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <p className="text-[10px] text-gray-400 italic mb-4">Belum ada review dari siswa untuk instruktur ini.</p>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Signature Area */}
-            <div className="mt-12 flex justify-end keep-together">
-              <div className="text-center w-48">
-                <p className="text-gray-500 mb-16 text-[10px]">Mengetahui,<br />Pimpinan LPK TriBakti</p>
-                <div className="border-b border-black w-full"></div>
-                <p className="font-bold text-black mt-1">Rifo Raihan</p>
-                <p className="text-[9px] text-gray-500">Direktur Utama</p>
+              <div className="text-[9px] text-gray-500 font-medium mt-0.5">
+                Jl. Gatot Subroto No.50, Ibuh, Payakumbuh Barat, Payakumbuh
               </div>
             </div>
           </div>
-        </main>
-        
-        {/* Footer hidden when printing */}
-        <div className="print:hidden">
-          <Footer />
+          <div className="text-right">
+            <h2 className="text-base font-bold uppercase tracking-wider text-black">Laporan Kinerja & Rating Instruktur</h2>
+            <p className="text-[10px] font-mono text-gray-500">Tanggal Cetak: {new Date().toLocaleDateString('id-ID')}</p>
+          </div>
+        </div>
+
+        {/* Print Metadata */}
+        <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-2 gap-4 text-xs">
+          <div>
+            <p className="font-semibold text-gray-500 uppercase text-[9px] tracking-wider">Dicetak Oleh</p>
+            <p className="font-bold text-black mt-0.5">{savedUser?.nama_lengkap || 'Owner'} (Owner)</p>
+          </div>
+          <div className="text-right">
+            <p className="font-semibold text-gray-500 uppercase text-[9px] tracking-wider">Ringkasan Sistem</p>
+            <p className="font-bold text-black mt-0.5">Total Instruktur: {processedInstructors.length} | Total Review: {totalReviewsGlobal} Ulasan</p>
+          </div>
+        </div>
+
+        {/* Table of Instructor Performance */}
+        <h3 className="text-sm font-bold mb-2 uppercase border-b pb-1 text-black">Tabel Rekapitulasi Kinerja</h3>
+        <table className="w-full text-left border-collapse border border-gray-300 mb-8">
+          <thead>
+            <tr className="bg-gray-100 border-b border-gray-300 text-[10px] font-bold">
+              <th className="px-3 py-2 border-r border-gray-300 text-center w-10">No</th>
+              <th className="px-3 py-2 border-r border-gray-300">Nama Instruktur</th>
+              <th className="px-3 py-2 border-r border-gray-300 text-center">Rating Rata-rata</th>
+              <th className="px-3 py-2 border-r border-gray-300 text-center">Jumlah Ulasan Siswa</th>
+              <th className="px-3 py-2 text-center">Total Jam Sesi Selesai</th>
+            </tr>
+          </thead>
+          <tbody>
+            {processedInstructors.map((inst, idx) => (
+              <tr key={inst.id} className="border-b border-gray-300 text-xs">
+                <td className="px-3 py-2 border-r border-gray-300 text-center">{idx + 1}</td>
+                <td className="px-3 py-2 border-r border-gray-300 font-semibold">{inst.nama_lengkap || inst.username || 'Tanpa Nama'}</td>
+                <td className="px-3 py-2 border-r border-gray-300 text-center font-bold text-amber-600">{inst.avgRating > 0 ? `${inst.avgRating.toFixed(1)} ★` : '-'}</td>
+                <td className="px-3 py-2 border-r border-gray-300 text-center font-mono">{inst.totalReviews} Ulasan</td>
+                <td className="px-3 py-2 text-center font-mono">{inst.completedSessions} Sesi</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Detailed Reviews per Instructor */}
+        <h3 className="text-sm font-bold mb-3 uppercase border-b pb-1 text-black">Detail Review Siswa per Instruktur</h3>
+        <div className="space-y-6">
+          {processedInstructors.map((inst, idx) => (
+            <div key={inst.id} className="keep-together">
+              <h4 className="font-bold text-xs text-[#0b6e99] mb-2">{idx + 1}. {inst.nama_lengkap || inst.username || 'Tanpa Nama'} ({inst.avgRating.toFixed(1)} ★ / {inst.totalReviews} Ulasan)</h4>
+              
+              {inst.reviews && inst.reviews.length > 0 ? (
+                <table className="w-full text-left border-collapse border border-gray-200 text-[10px] mb-4">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200 font-bold text-gray-500">
+                      <th className="px-2 py-1 w-24">Nama Siswa</th>
+                      <th className="px-2 py-1 w-12 text-center">Rating</th>
+                      <th className="px-2 py-1">Ulasan / Umpan Balik</th>
+                      <th className="px-2 py-1 w-20 text-center">Sesi</th>
+                      <th className="px-2 py-1 w-16 text-right">Tanggal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {inst.reviews.map((rev, rIdx) => (
+                      <tr key={rev.id || rIdx} className="border-b border-gray-150">
+                        <td className="px-2 py-1.5 font-medium">{rev.nama_siswa || 'Siswa'}</td>
+                        <td className="px-2 py-1.5 text-center font-bold text-amber-600">{rev.skor} ★</td>
+                        <td className="px-2 py-1.5 italic text-gray-700">"{rev.ulasan || 'Tanpa ulasan tertulis.'}"</td>
+                        <td className="px-2 py-1.5 text-center text-gray-500">{rev.sesi_info?.split('|')[0] || rev.sesi_info}</td>
+                        <td className="px-2 py-1.5 text-right font-mono text-gray-500">{rev.created_at ? new Date(rev.created_at).toLocaleDateString('id-ID') : '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-[10px] text-gray-400 italic mb-4">Belum ada review dari siswa untuk instruktur ini.</p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Signature Area */}
+        <div className="mt-12 flex justify-end keep-together">
+          <div className="text-center w-48">
+            <p className="text-gray-500 mb-16 text-[10px]">Mengetahui,<br />Pimpinan LPK TriBakti</p>
+            <div className="border-b border-black w-full"></div>
+            <p className="font-bold text-black mt-1">Rifo Raihan</p>
+            <p className="text-[9px] text-gray-500">Direktur Utama</p>
+          </div>
         </div>
       </div>
     </div>
