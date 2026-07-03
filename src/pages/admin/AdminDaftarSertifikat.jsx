@@ -615,7 +615,7 @@ export default function AdminDaftarSertifikat() {
           <div className="text-center w-48">
             <p className="text-gray-500 mb-16 text-[10px]">Mengetahui,<br />Pimpinan LPK TriBakti</p>
             <div className="border-b border-black w-full"></div>
-            <p className="font-bold text-black mt-1">Rivo Raihan</p>
+            <p className="font-bold text-black mt-1">Rivo Raihan, M.Pd.</p>
             <p className="text-[9px] text-gray-500">Direktur Utama</p>
           </div>
         </div>
