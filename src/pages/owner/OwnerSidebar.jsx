@@ -10,7 +10,8 @@ import {
   FileText,
   Menu,
   X,
-  Wallet
+  Wallet,
+  Star
 } from 'lucide-react';
 
 export default function OwnerSidebar({ activeMenu }) {
@@ -68,6 +69,11 @@ export default function OwnerSidebar({ activeMenu }) {
       name: 'Laporan Ujian',
       path: '/owner/laporan-ujian',
       icon: FileText
+    },
+    {
+      name: 'Laporan Kinerja',
+      path: '/owner/laporan-kinerja',
+      icon: Star
     },
     {
       name: 'Data Siswa & Instruktur',

@@ -59,6 +59,7 @@ import OwnerDetailSiswa from './pages/owner/OwnerDetailSiswa';
 import OwnerKwitansiSiswa from './pages/owner/OwnerKwitansiSiswa';
 import OwnerGajiInstruktur from './pages/owner/OwnerGajiInstruktur';
 import OwnerPengeluaran from './pages/owner/OwnerPengeluaran';
+import OwnerLaporanKinerjaInstruktur from './pages/owner/OwnerLaporanKinerjaInstruktur';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -105,7 +106,7 @@ export default function App() {
           href="https://wa.me/6281363278134?text=Halo%20Admin%20TriBakti%2C%20saya%20ingin%20bertanya%20mengenai%20layanan%20dan%20pendaftaran%20kursus%20mengemudi%20di%20TriBakti..."
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 left-6 z-50 bg-[#25D366] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer print:hidden border border-emerald-400/20"
+          className="fixed bottom-6 left-6 md:left-auto md:right-6 md:bottom-24 z-50 bg-[#25D366] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer print:hidden border border-emerald-400/20"
           title="Hubungi Kami di WhatsApp"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="20" height="20" fill="currentColor">
@@ -175,6 +176,7 @@ export default function App() {
           <Route path="/owner/siswa/kwitansi" element={<ProtectedRoute user={user} requiredRole="owner"><OwnerKwitansiSiswa /></ProtectedRoute>} />
           <Route path="/owner/gaji" element={<ProtectedRoute user={user} requiredRole="owner"><OwnerGajiInstruktur /></ProtectedRoute>} />
           <Route path="/owner/pengeluaran" element={<ProtectedRoute user={user} requiredRole="owner"><OwnerPengeluaran /></ProtectedRoute>} />
+          <Route path="/owner/laporan-kinerja" element={<ProtectedRoute user={user} requiredRole="owner"><OwnerLaporanKinerjaInstruktur /></ProtectedRoute>} />
 
           {/* Default Redirect Halaman Awal */}
           <Route path="*" element={<Navigate to="/landing" replace />} />

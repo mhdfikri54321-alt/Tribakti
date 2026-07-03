@@ -134,7 +134,7 @@ export default function LandingPage() {
       {/* NAVIGATION */}
       <nav className="flex justify-between items-center px-4 md:px-8 py-4 bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-[#e9e9e7] w-full">
         <div className="flex items-center gap-2">
-          <img src={logoTribakti} alt="Logo" className="w-8 h-8 object-contain" />
+          <img src={logoTribakti} alt="Logo" className="w-8 h-8 object-contain dark:brightness-0 dark:invert" />
           <h1 className="text-lg font-black tracking-widest">
             <span className="text-black">Tri</span>
             <span className="text-[#0b6e99]">Bakti</span>
@@ -200,7 +200,7 @@ export default function LandingPage() {
         {/* HERO LOGO DISPLAY */}
         <div className="relative group">
           <div className="relative rounded-2xl overflow-hidden border border-[#e9e9e7] shadow-2xl aspect-[4/3] bg-[#fbfbfa] flex items-center justify-center p-12 exclude-dark-white">
-            <img src={logoTribakti} alt="Logo TriBakti" className="w-full h-full object-contain" />
+            <img src={logoTribakti} alt="Logo TriBakti" className="w-full h-full object-contain dark:brightness-0 dark:invert" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
           </div>
         </div>

@@ -419,12 +419,20 @@ export default function OwnerDashboard() {
 
           {/* Laporan Kinerja & Rating Instruktur */}
           <div className="bg-white p-5 sm:p-8 rounded-2xl border border-[#e9e9e7] shadow-sm mt-8">
-            <div className="mb-6">
-              <h3 className="text-lg md:text-xl font-bold text-[#37352f] flex items-center gap-2">
-                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                Laporan Kinerja & Rating Instruktur
-              </h3>
-              <p className="text-xs text-[#37352f]/50 mt-1">Akumulasi penilaian bintang dan umpan balik langsung dari siswa untuk setiap instruktur.</p>
+            <div className="mb-6 flex justify-between items-start gap-4">
+              <div>
+                <h3 className="text-lg md:text-xl font-bold text-[#37352f] flex items-center gap-2">
+                  <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                  Laporan Kinerja & Rating Instruktur
+                </h3>
+                <p className="text-xs text-[#37352f]/50 mt-1">Akumulasi penilaian bintang dan umpan balik langsung dari siswa untuk setiap instruktur.</p>
+              </div>
+              <button 
+                onClick={() => navigate('/owner/laporan-kinerja')}
+                className="text-[10px] font-bold text-[#0b6e99] hover:underline cursor-pointer bg-[#efefed] px-2.5 py-1.5 rounded-lg border border-[#e9e9e7] shrink-0"
+              >
+                Detail
+              </button>
             </div>
 
             {loading ? (
